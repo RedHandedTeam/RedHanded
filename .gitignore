@@ -9,6 +9,10 @@
 
 # Visual Studio Directories
 **/.vs
+**/Debug
+**/Release
+**/RedHanded/Debug
+**/RedHanded/Release
 
 # Precompiled Headers
 *.gch
