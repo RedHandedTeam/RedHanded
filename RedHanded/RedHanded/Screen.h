@@ -6,15 +6,15 @@ class Screen
 
 public:
 
-	Screen();
-	virtual ~Screen();
+	Screen() {}
+	virtual ~Screen() {}
 
 public:
 
-	virtual bool Initialize() = 0;
-	virtual void Clear()      = 0;
-	virtual void Present()    = 0;
-	virtual void Shutdown()   = 0;
+	virtual bool Initialize(int width = 1920, int height = 1080) = 0;
+	virtual void Clear()										 = 0;
+	virtual void Present()										 = 0;
+	virtual void Shutdown()										 = 0;
 
 private:
 
