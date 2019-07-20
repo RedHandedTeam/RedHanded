@@ -18,8 +18,8 @@ public:
 
 private:
 
-	int width;
-	int height;
+	int m_width;
+	int m_height;
 	//??
 
 };
