@@ -20,6 +20,7 @@
 */
 
 
+
 #ifndef __glad_h_
 #define __glad_h_
 
@@ -30,6 +31,7 @@
 
 #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__)
 #define APIENTRY __stdcall
+#include <windows.h>
 #endif
 
 #ifndef APIENTRY
