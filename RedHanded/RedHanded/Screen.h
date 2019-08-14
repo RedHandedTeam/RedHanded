@@ -6,21 +6,20 @@ class Screen
 
 public:
 
-	Screen() {}
+	Screen();
 	virtual ~Screen() {}
 
 public:
 
-	virtual bool Initialize(int width = 1920, int height = 1080) = 0;
-	virtual void Clear()										 = 0;
-	virtual void Present()										 = 0;
-	virtual void Shutdown()										 = 0;
+	virtual bool Initialize(const char* windowTitle, int width = 1920, int height = 1080) = 0;
+	virtual void Clear()																  = 0;
+	virtual void Present()																  = 0;
+	virtual void Shutdown()																  = 0;
 
-private:
+protected:
 
-	int width;
-	int height;
-	//??
+	int m_width;
+	int m_height;
 
 };
 
