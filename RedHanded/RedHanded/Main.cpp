@@ -1,11 +1,10 @@
 #include <iostream>
 #include "ScreenGL.h"
-
+#include "ScreenDX11.h"
 
 int main()
 {
-
-	ScreenGL testScreen(3, 1, false);
+	ScreenDX11 testScreen(0, 7);
 
 	if (!testScreen.Initialize("Test", 640, 480))
 		return 0;

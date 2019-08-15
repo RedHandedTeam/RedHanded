@@ -135,11 +135,14 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ScreenDX11.cpp" />
     <ClCompile Include="ScreenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ScreenDX11.h" />
     <ClInclude Include="ScreenGL.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

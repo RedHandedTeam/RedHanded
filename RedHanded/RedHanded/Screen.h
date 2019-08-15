@@ -1,6 +1,8 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include "Utilities.h"
+
 class Screen
 {
 
@@ -21,6 +23,12 @@ protected:
 	int m_width;
 	int m_height;
 
+	static LRESULT CALLBACK ProcessInput(HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		//nothing here - we will create a Input Manager later!
+		//process all other default messages and return that result
+		return DefWindowProc(windowHandle, message, wParam, lParam);
+	}
 };
 
 #endif

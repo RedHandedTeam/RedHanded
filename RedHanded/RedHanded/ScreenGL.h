@@ -1,8 +1,6 @@
 #ifndef SCREEN_GL_H
 #define SCREEN_GL_H
 
-#include <Windows.h>
-#include <vector>
 #include "Screen.h"
 
 class ScreenGL : public Screen
@@ -23,11 +21,11 @@ public:
 private:
 
 	HWND m_windowHandle;
+	HINSTANCE m_instanceHandle;
 	HDC m_deviceContext;
 	HGLRC m_renderContext;
 
-	std::vector<int> m_attributes;
-
+	std::array<int, 7> m_attributes;
 };
 
 #endif
