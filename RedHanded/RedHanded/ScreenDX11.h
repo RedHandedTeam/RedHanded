@@ -8,20 +8,18 @@ class ScreenDX11 : public Screen
 
 public:
 
-	ScreenDX11(int lowest = 4, int highest = 0);
+	ScreenDX11(int lowest = 6, int highest = 6);
 	virtual ~ScreenDX11() {}
 
 public:
 
-	virtual bool Initialize(const char* windowTitle, int width, int height);
+	virtual bool Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution);
 	virtual void Clear();
 	virtual void Present();
 	virtual void Shutdown();
 
 private:
 
-	HWND m_windowHandle;
-	HINSTANCE m_instanceHandle;
 	Microsoft::WRL::ComPtr<ID3D11Device> m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> m_swapChain;

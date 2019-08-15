@@ -15,69 +15,13 @@ ScreenGL::ScreenGL(int major, int minor, bool isCoreContext)
 	m_attributes[4] = WGL_CONTEXT_PROFILE_MASK_ARB;
 	m_attributes[5] = profile;
 
-	m_instanceHandle = (HINSTANCE)GetModuleHandle(NULL);
-	m_windowHandle = nullptr;
 	m_deviceContext = nullptr;
 	m_renderContext = nullptr;
 }
 
-bool ScreenGL::Initialize(const char* windowTitle, int width, int height)
+bool ScreenGL::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
 {
-	//set the center position of window
-	int windowX = CW_USEDEFAULT;
-	int windowY = CW_USEDEFAULT;
-
-	//set the rectangular dimensions of window
-	RECT windowRect;
-	windowRect.left = 0;
-	windowRect.right = width;
-	windowRect.top = 0;
-	windowRect.bottom = height;
-
-	//set the properties of the window 
-	WNDCLASSEX windowClass;
-	windowClass.cbSize = sizeof(WNDCLASSEX);
-	windowClass.style = CS_HREDRAW | CS_VREDRAW;
-	windowClass.lpfnWndProc = ProcessInput; //[TODO: add a proper Input Manager here later]
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = m_instanceHandle;
-	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	windowClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	windowClass.lpszMenuName = nullptr;
-	windowClass.lpszClassName = "WindowClass";
-	windowClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
-
-	//register the windows class with the OS and if there
-    //was an error, display error message and return false
-	if (!RegisterClassEx(&windowClass))
-	{
-		MessageBox(m_windowHandle, "Application window could not be created.",
-			                       "Error", MB_ICONERROR | MB_OK);
-		return false;
-	}
-
-	//set style of window and adjust it within the OS
-	DWORD windowStyle = WS_OVERLAPPEDWINDOW | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
-	AdjustWindowRectEx(&windowRect, windowStyle, false, 0);
-
-	//after all the above pilava create the actual application window
-    //this is the main application window therefore it has no parent
-	m_windowHandle = CreateWindowEx(0, "WindowClass", windowTitle, windowStyle, windowX, windowY, width, height,
-									nullptr, nullptr, m_instanceHandle, nullptr);
-
-	//if application window could not be created, display error message and return false
-	if (!m_windowHandle)
-	{
-		MessageBox(m_windowHandle, "Application window could not be created.",
-			                       "Error", MB_ICONERROR | MB_OK);
-		return false;
-	}
-
-	//***********************
-	//OpenGL specific setup
-	//***********************
+	Screen::Initialize(windowTitle, resolution);
 
 	//first create the device context using application window created earlier
 	m_deviceContext = GetDC(m_windowHandle);
@@ -105,7 +49,7 @@ bool ScreenGL::Initialize(const char* windowTitle, int width, int height)
 
 	//acquire extension function for modern OpenGL 
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB =
-    (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+    reinterpret_cast<PFNWGLCREATECONTEXTATTRIBSARBPROC>(wglGetProcAddress("wglCreateContextAttribsARB"));
 
 	//if extension function is not found, then modern OpenGL is not supported
 	if (!wglCreateContextAttribsARB)
@@ -146,11 +90,6 @@ bool ScreenGL::Initialize(const char* windowTitle, int width, int height)
 	ShowWindow(m_windowHandle, SW_SHOW);
 	UpdateWindow(m_windowHandle);
 
-	//store width and height properties for later 
-	//use when setting up 2D and 3D projections
-	m_width = width;
-	m_height = height;
-
 	return true;
 }
 
@@ -171,10 +110,4 @@ void ScreenGL::Shutdown()
 
 	//destroy the rendering context
 	wglDeleteContext(m_renderContext);
-
-	//destroy window
-	DestroyWindow(m_windowHandle);
-
-	//unregister window
-	UnregisterClass("WindowClass", m_instanceHandle);
 }

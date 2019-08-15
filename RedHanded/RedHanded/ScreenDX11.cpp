@@ -14,78 +14,22 @@ ScreenDX11::ScreenDX11(int lowest, int highest)
 	D3D_FEATURE_LEVEL_11_1
 	};
 
-	for (int i = lowest; i < highest; i++)
+	for (int i = lowest; i <= highest; i++)
 	{
 		m_compatibleLevels.push_back(levels[i]);
 	}
-	
-	m_instanceHandle = (HINSTANCE)GetModuleHandle(NULL);
-	m_windowHandle = nullptr;
+
 	m_device = nullptr;
 	m_deviceContext = nullptr;
 }
 
-bool ScreenDX11::Initialize(const char* windowTitle, int width, int height)
+bool ScreenDX11::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
 {
-	//set the center position of window
-	int windowX = CW_USEDEFAULT;
-	int windowY = CW_USEDEFAULT;
-
-	//set the rectangular dimensions of window
-	RECT windowRect;
-	windowRect.left = 0;
-	windowRect.right = width;
-	windowRect.top = 0;
-	windowRect.bottom = height;
-
-	//set the properties of the window 
-	WNDCLASSEX windowClass;
-	windowClass.cbSize = sizeof(WNDCLASSEX);
-	windowClass.style = CS_HREDRAW | CS_VREDRAW;
-	windowClass.lpfnWndProc = ProcessInput; //[TODO: add a proper Input Manager here later]
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = m_instanceHandle;
-	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	windowClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	windowClass.lpszMenuName = nullptr;
-	windowClass.lpszClassName = "WindowClass";
-	windowClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
-
-	//register the windows class with the OS and if there
-	//was an error, display error message and return false
-	if (!RegisterClassEx(&windowClass))
-	{
-		MessageBox(m_windowHandle, "Application window could not be created.",
-								   "Error", MB_ICONERROR | MB_OK);
-		return false;
-	}
-
-	//set style of window and adjust it within the OS
-	DWORD windowStyle = WS_OVERLAPPEDWINDOW | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
-	AdjustWindowRectEx(&windowRect, windowStyle, false, 0);
-
-	//after all the above pilava create the actual application window
-	//this is the main application window therefore it has no parent
-	m_windowHandle = CreateWindowEx(0, "WindowClass", windowTitle, windowStyle, windowX, windowY, width, height,
-									nullptr, nullptr, m_instanceHandle, nullptr);
-
-	//if application window could not be created, display error message and return false
-	if (!m_windowHandle)
-	{
-		MessageBox(m_windowHandle, "Application window could not be created.",
-								   "Error", MB_ICONERROR | MB_OK);
-		return false;
-	}
-
-	//***********************
-	//DirectX11 specific setup
-	//***********************
+	Screen::Initialize(windowTitle, resolution);
 
 	//this flag adds support for surfaces with a color-channel ordering different
 	//from the API default. It is required for compatibility with Direct2D
-	UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+	unsigned int deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 	#if defined(DEBUG) || defined(_DEBUG)
 		deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 	#endif
@@ -93,7 +37,7 @@ bool ScreenDX11::Initialize(const char* windowTitle, int width, int height)
 	//create swapchain properties
 	DXGI_SWAP_CHAIN_DESC swapChainDescriptor;
 	ZeroMemory(&swapChainDescriptor, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDescriptor.Windowed = TRUE;
+	swapChainDescriptor.Windowed = true;
 	swapChainDescriptor.BufferCount = 2;
 	swapChainDescriptor.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	swapChainDescriptor.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -136,13 +80,13 @@ bool ScreenDX11::Initialize(const char* windowTitle, int width, int height)
 
 	//configure the back buffer
 	D3D11_TEXTURE2D_DESC backBufferDescriptor;
-	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)m_backBuffer.GetAddressOf());
+	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_backBuffer.GetAddressOf()));
 	m_backBuffer->GetDesc(&backBufferDescriptor);
 
 	//create a depth-stencil view for use with 3D rendering if needed
 	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT,
-										   static_cast<UINT> (backBufferDescriptor.Width),
-										   static_cast<UINT> (backBufferDescriptor.Height),
+										   static_cast<unsigned int> (backBufferDescriptor.Width),
+										   static_cast<unsigned int> (backBufferDescriptor.Height),
 										   1, 1, D3D11_BIND_DEPTH_STENCIL);
 
 	//parse the depth texture settings
@@ -155,8 +99,8 @@ bool ScreenDX11::Initialize(const char* windowTitle, int width, int height)
 	
 	//create viewport using the back buffer dimensions
 	ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
-	m_viewport.Height = (float)backBufferDescriptor.Height;
-	m_viewport.Width = (float)backBufferDescriptor.Width;
+	m_viewport.Height = static_cast<float>(backBufferDescriptor.Height);
+	m_viewport.Width  = static_cast<float>(backBufferDescriptor.Width);
 	m_viewport.MinDepth = 0;
 	m_viewport.MaxDepth = 1;
 
@@ -165,11 +109,6 @@ bool ScreenDX11::Initialize(const char* windowTitle, int width, int height)
 	//display and update the window for the first time
 	ShowWindow(m_windowHandle, SW_SHOW);
 	UpdateWindow(m_windowHandle);
-
-	//store width and height properties for later 
-	//use when setting up 2D and 3D projections
-	m_width = width;
-	m_height = height;
 
 	return true;
 }
@@ -203,10 +142,4 @@ void ScreenDX11::Shutdown()
 
 	//release the devices context resources:
 	m_deviceContext->Flush();
-
-	//destroy window
-	DestroyWindow(m_windowHandle);
-
-	//unregister window
-	UnregisterClass("WindowClass", m_instanceHandle);
 }

@@ -13,15 +13,13 @@ public:
 
 public:
 
-	virtual bool Initialize(const char* windowTitle, int width, int height);
+	virtual bool Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution);
 	virtual void Clear();
 	virtual void Present();
 	virtual void Shutdown();
 
 private:
 
-	HWND m_windowHandle;
-	HINSTANCE m_instanceHandle;
 	HDC m_deviceContext;
 	HGLRC m_renderContext;
 

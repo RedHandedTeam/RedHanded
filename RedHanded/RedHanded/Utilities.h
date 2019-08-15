@@ -17,5 +17,6 @@
 //=============== READ ABOVE
 
 //STD Library
+#include <string>
 #include <vector>
 #include <array>
