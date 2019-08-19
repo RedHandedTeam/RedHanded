@@ -34,8 +34,6 @@ int main()
 	}
 
 	testScreen.Shutdown();
-
-	system("pause");
 	return 0;
 
 }

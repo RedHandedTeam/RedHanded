@@ -84,10 +84,7 @@ bool ScreenDX11::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resoluti
 	m_backBuffer->GetDesc(&backBufferDescriptor);
 
 	//create a depth-stencil view for use with 3D rendering if needed
-	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT,
-										   static_cast<unsigned int> (backBufferDescriptor.Width),
-										   static_cast<unsigned int> (backBufferDescriptor.Height),
-										   1, 1, D3D11_BIND_DEPTH_STENCIL);
+	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, backBufferDescriptor.Width, backBufferDescriptor.Height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
 
 	//parse the depth texture settings
 	m_device->CreateTexture2D(&depthStencilDesc, nullptr, m_depthStencil.GetAddressOf());
