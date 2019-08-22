@@ -1,5 +1,6 @@
 #ifndef SCREEN_H
 #define SCREEN_H
+
 #define ASPECT_RATIO_W 16
 #define ASPECT_RATIO_H 9
 
@@ -23,7 +24,7 @@ public:
 
 public:
 
-	virtual bool Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution);
+	virtual bool Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution);
 	virtual void Clear() {};
 	virtual void Present() {};
 	virtual void Shutdown() {};

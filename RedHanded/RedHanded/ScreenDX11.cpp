@@ -23,7 +23,7 @@ ScreenDX11::ScreenDX11(int lowest, int highest)
 	m_deviceContext = nullptr;
 }
 
-bool ScreenDX11::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
+bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution)
 {
 	Screen::Initialize(windowTitle, resolution);
 
@@ -78,13 +78,11 @@ bool ScreenDX11::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resoluti
 		return false;
 	}
 
-	//configure the back buffer
-	D3D11_TEXTURE2D_DESC backBufferDescriptor;
+	//configure the back buffer from swapchain
 	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_backBuffer.GetAddressOf()));
-	m_backBuffer->GetDesc(&backBufferDescriptor);
 
 	//create a depth-stencil view for use with 3D rendering if needed
-	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, backBufferDescriptor.Width, backBufferDescriptor.Height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
+	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, m_width, m_height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
 
 	//parse the depth texture settings
 	m_device->CreateTexture2D(&depthStencilDesc, nullptr, m_depthStencil.GetAddressOf());
@@ -94,10 +92,10 @@ bool ScreenDX11::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resoluti
 	m_device->CreateDepthStencilView(m_depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.GetAddressOf());
 	m_device->CreateRenderTargetView(m_backBuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
 	
-	//create viewport using the back buffer dimensions
+	//create viewport using the stored width and height
 	ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
-	m_viewport.Height = static_cast<float>(backBufferDescriptor.Height);
-	m_viewport.Width  = static_cast<float>(backBufferDescriptor.Width);
+	m_viewport.Height = static_cast<float>(m_height);
+	m_viewport.Width  = static_cast<float>(m_width);
 	m_viewport.MinDepth = 0;
 	m_viewport.MaxDepth = 1;
 

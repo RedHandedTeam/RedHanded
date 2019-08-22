@@ -19,7 +19,7 @@ ScreenGL::ScreenGL(int major, int minor, bool isCoreContext)
 	m_renderContext = nullptr;
 }
 
-bool ScreenGL::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
+bool ScreenGL::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution)
 {
 	Screen::Initialize(windowTitle, resolution);
 
@@ -85,6 +85,9 @@ bool ScreenGL::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution
 			                       "Error", MB_ICONERROR | MB_OK);
 		return false;
 	}
+
+	//create viewport using the stored width and height
+	glViewport(0, 0, m_width, m_height);
 
 	//display and update the window for the first time
 	ShowWindow(m_windowHandle, SW_SHOW);

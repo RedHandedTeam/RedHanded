@@ -2,7 +2,7 @@
 
 Screen::Screen()
 {
-	m_instanceHandle = (HINSTANCE)GetModuleHandle(NULL);
+	m_instanceHandle = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
 	m_windowHandle = nullptr;
 
 	m_height = 0;
@@ -29,7 +29,7 @@ long CALLBACK ProcessWindowEvent(HWND windowHandle, unsigned int message, unsign
 	return DefWindowProc(windowHandle, message, wParam, lParam);
 }
 
-bool Screen::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
+bool Screen::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution)
 {
 	//calculate standard resolution of window
 	m_height = resolution;
@@ -56,7 +56,7 @@ bool Screen::Initialize(std::string windowTitle, SCREEN_RESOLUTIONS resolution)
 	windowClass.hInstance = m_instanceHandle;
 	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	windowClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	windowClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 	windowClass.lpszMenuName = nullptr;
 	windowClass.lpszClassName = "WindowClass";
 	windowClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
