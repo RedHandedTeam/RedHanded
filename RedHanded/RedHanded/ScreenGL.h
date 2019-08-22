@@ -1,8 +1,6 @@
 #ifndef SCREEN_GL_H
 #define SCREEN_GL_H
 
-#include <Windows.h>
-#include <vector>
 #include "Screen.h"
 
 class ScreenGL : public Screen
@@ -15,19 +13,17 @@ public:
 
 public:
 
-	virtual bool Initialize(const char* windowTitle, int width, int height);
+	virtual bool Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution);
 	virtual void Clear();
 	virtual void Present();
 	virtual void Shutdown();
 
 private:
 
-	HWND m_windowHandle;
 	HDC m_deviceContext;
 	HGLRC m_renderContext;
 
-	std::vector<int> m_attributes;
-
+	std::array<int, 7> m_attributes;
 };
 
 #endif
