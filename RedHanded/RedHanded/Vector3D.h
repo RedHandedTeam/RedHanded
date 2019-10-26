@@ -1,20 +1,19 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-//#include <iomanip>
-//#include <iostream>
-//#include <math.h>
-
-//template <class T> class Vector2D;
-//template <class T> class Vector4D;
-
 template <class T> class Vector3
 {
 
-//public:
+public:
 
-	//enum AxisType   { X_AXIS, Y_AXIS, Z_AXIS };
-	//enum VectorType { ZERO, LEFT, RIGHT, UP, DOWN, FORWARD, BACKWARD };
+	static const Vector3<T> Up;
+	static const Vector3<T> Down;
+	static const Vector3<T> Left;
+	static const Vector3<T> Right;
+	static const Vector3<T> Forward;
+	static const Vector3<T> Back;
+	static const Vector3<T> Zero;
+	static const Vector3<T> One;
 
 public:
 
@@ -104,6 +103,15 @@ public :
 	T z;
 
 };
+
+template <class T> const Vector3<T> Vector3<T>::Up = Vector3<T>(0, 1, 0);
+template <class T> const Vector3<T> Vector3<T>::Down = Vector3<T>(0, -1, 0);
+template <class T> const Vector3<T> Vector3<T>::Left = Vector3<T>(-1, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::Right = Vector3<T>(1, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::Forward = Vector3<T>(0, 0, 1);
+template <class T> const Vector3<T> Vector3<T>::Back = Vector3<T>(0, 0, -1);
+template <class T> const Vector3<T> Vector3<T>::Zero = Vector3<T>(0, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::One = Vector3<T>(1, 1, 1);
 
 //------------------------------------------------------------------------------------------------------
 //STATIC function that creates a Vector3D object based on angle, size and axis passed
