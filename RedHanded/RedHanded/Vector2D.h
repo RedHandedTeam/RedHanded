@@ -1,12 +1,6 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-//#include <iomanip>
-//#include <iostream>
-//#include <math.h>
-
-//template <class T> class Vector3D;
-
 template <class T> class Vector2
 {
 
@@ -18,10 +12,6 @@ public:
 	static const Vector2<T> Right;
 	static const Vector2<T> Zero;
 	static const Vector2<T> One;
-
-	//static Vector2D<double> AngleToVector(double angle, double size = 100.0);
-	//static Vector2D<double> Lerp(Vector2<double>& firstVector,
-		//                         Vector2<double>& secondVector, double delta, double epsilon = 0.01);
 
 public:
 
@@ -45,13 +35,15 @@ public:
 	
 public:
 
-	T Magnitude();
-	T SqrMagnitude();
-	T Lerp(const Vector2<T> second);
-	T Distance(const Vector2<T>& second);
+	T Magnitude() const;
+	T SqrMagnitude() const;
+	T Distance(const Vector2<T>& second) const;
 	T Dot(const Vector2<T>& second) const;
+
 	Vector2<T> Normalize() const;
-	
+	Vector2<T> Lerp(const Vector2<T>& second, float delta) const;
+	Vector2<T> Slerp(const Vector2<T>& second, float delta) const;
+
 public:
 
 	T x;
@@ -66,37 +58,6 @@ template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(static_cast<T
 template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(static_cast<T>(0), static_cast<T>(0));
 template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(static_cast<T>(1), static_cast<T>(1));
  
-
-//------------------------------------------------------------------------------------------------------
-//STATIC function that performs linear interpolation between two Vector2D objects 
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<double> Vector2D<T>::Lerp(Vector2D<double>& firstVector,
-//	                                                  Vector2D<double>& secondVector,
-//	                                                  double delta, double epsilon)
-//{
-//
-//	//use a simple algorithm to create the new lerped vector value
-//	Vector2D<double> result = (firstVector * (1.0 - delta)) + (secondVector * delta);
-//
-//	//check if the difference between the XY components of the source and destination vector
-//	//are within the epsilon range. If they are, make them both equal. This ensures that the source
-//	//vector will reach the destination value as quick as the epsilon value states. The smaller the 
-//	//epsilon value, the longer it will take to reach the destination vector.
-//	if (abs(secondVector.X - result.X) <= epsilon)
-//	{
-//		result.X = secondVector.X;
-//	}
-//
-//	if (abs(secondVector.Y - result.Y) <= epsilon)
-//	{
-//		result.Y = secondVector.Y;
-//	}
-//
-//	return result;
-//
-//}
-
-
 //======================================================================================================
 template <class T> Vector2<T>::Vector2(T x, T y)
 {
@@ -164,26 +125,19 @@ template <class T> Vector2<T> Vector2<T>::operator-()
 	return result;
 }
 //======================================================================================================
-template <class T> T Vector2<T>::Magnitude()
+template <class T> T Vector2<T>::Magnitude() const
 {
 	return static_cast<T>(sqrt(SqrMagnitude()));
 }
 //======================================================================================================
-template <class T> T Vector2<T>::SqrMagnitude()
+template <class T> T Vector2<T>::SqrMagnitude() const
 {
 	return (x * x + y * y);
 }
-
-
-//lerp...
-
-
 //======================================================================================================
-template <class T> T Vector2<T>::Distance(const Vector2<T>& second)
+template <class T> T Vector2<T>::Distance(const Vector2<T>& second) const
 {
-	Vector2<T> result(*this);
-	result -= second;
-	return result.Magnitude();
+	return (*this - second).Magnitude();
 }
 //======================================================================================================
 template <class T> T Vector2<T>::Dot(const Vector2<T>& second) const
@@ -193,10 +147,22 @@ template <class T> T Vector2<T>::Dot(const Vector2<T>& second) const
 //======================================================================================================
 template <class T> Vector2<T> Vector2<T>::Normalize() const
 {
-	Vector2<T> result(*this);
-	T length = result.Magnitude();
-	result /= length;
-	return result;
+	T length = Magnitude();
+	return *this / length;
+}
+//======================================================================================================
+template <class T> Vector2<T> Vector2<T>::Lerp(const Vector2<T>& second, float delta) const
+{
+	return (*this * (1.0 - delta)) + (second * delta);
+}
+//======================================================================================================
+template<class T> Vector2<T> Vector2<T>::Slerp(const Vector2<T>& second, float delta) const
+{
+	float dot = Dot(second);
+	float angle = acos(dot) * delta;
+	Vector2<T> relative = second - (*this) * dot;
+	relative = relative.Normalize();
+	return (*this * cos(angle)) + (relative * sin(angle));
 }
 
 #endif
