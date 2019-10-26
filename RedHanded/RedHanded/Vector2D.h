@@ -30,28 +30,20 @@ public:
 
 public:
 
-	Vector2<T>& operator=(const T rhs);
-	//Vector2<T>& operator=(const VectorType rhs);
+	Vector2<T>& operator=(const T second);
+	//Vector2<T>& operator=(const VectorType second);
 
-	Vector2<T> operator+(const Vector2<T>& rhs) const;
-	//Vector2<T> operator+(const T rhs);
-	Vector2<T>& operator+=(const Vector2<T>& rhs);
-	//Vector2<T>& operator+=(const T rhs);
+	Vector2<T> operator+(const Vector2<T>& second) const;
+	Vector2<T>& operator+=(const Vector2<T>& second);
+	
+	Vector2<T> operator-(const Vector2<T>& second) const;
+	Vector2<T>& operator-=(const Vector2<T>& second);
+	
+	Vector2<T> operator*(const T second) const;
+	Vector2<T>& operator*=(const T second);
 
-	Vector2<T> operator-(const Vector2<T>& rhs) const;
-	//Vector2<T> operator-(const T rhs);
-	Vector2<T>& operator-=(const Vector2<T>& rhs);
-	//Vector2<T>& operator-=(const T rhs);
-
-	//Vector2<T> operator*(const Vector2D<T>& rhs) const;
-	Vector2<T> operator*(const T rhs);
-	//Vector2<T>& operator*=(const Vector2D<T>& rhs);
-	Vector2<T>& operator*=(const T rhs);
-
-	//Vector2<T> operator/(const Vector2<T>& rhs) const;
-	Vector2<T> operator/(const T rhs);
-	//Vector2<T>& operator/=(const Vector2<T>& rhs);
-	Vector2<T>& operator/=(const T rhs);
+	Vector2<T> operator/(const T second) const;
+	Vector2<T>& operator/=(const T second);
 
 	//Vector2D<T>& operator++();
 	//Vector2D<T> operator++(int);
@@ -60,23 +52,23 @@ public:
 
 	Vector2<T> operator-();
 
-	//bool operator==(const Vector2D<T>& rhs);
-	//bool operator==(const T rhs);
-	//bool operator==(const VectorType rhs);
+	//bool operator==(const Vector2D<T>& second);
+	//bool operator==(const T second);
+	//bool operator==(const VectorType second);
 
-	//bool operator!=(const Vector2D<T>& rhs);
-	//bool operator!=(const T rhs);
-	//bool operator!=(const VectorType rhs);
+	//bool operator!=(const Vector2D<T>& second);
+	//bool operator!=(const T second);
+	//bool operator!=(const VectorType second);
 
-	//bool operator<(const Vector2D<T>& rhs);
-	//bool operator<(const T rhs);
-	//bool operator<=(const Vector2D<T>& rhs);
-	//bool operator<=(const T rhs);
+	//bool operator<(const Vector2D<T>& second);
+	//bool operator<(const T second);
+	//bool operator<=(const Vector2D<T>& second);
+	//bool operator<=(const T second);
 
-	//bool operator>(const Vector2D<T>& rhs);
-	//bool operator>(const T rhs);
-	//bool operator>=(const Vector2D<T>& rhs);
-	//bool operator>=(const T rhs);
+	//bool operator>(const Vector2D<T>& second);
+	//bool operator>(const T second);
+	//bool operator>=(const Vector2D<T>& second);
+	//bool operator>=(const T second);
 
 public:
 
@@ -105,12 +97,12 @@ public:
 
 //int Vector2::i = 10;
 
-template <class T> const Vector2<T> Vector2<T>::Up = Vector2<T>(0, 1);
-template <class T> const Vector2<T> Vector2<T>::Down = Vector2<T>(0, -1);
-template <class T> const Vector2<T> Vector2<T>::Left = Vector2<T>(-1, 0);
-template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(1, 0);
-template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(0, 0);
-template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(1, 1);
+template <class T> const Vector2<T> Vector2<T>::Up = Vector2<T>(static_cast<T>(0), static_cast<T>(1));
+template <class T> const Vector2<T> Vector2<T>::Down = Vector2<T>(static_cast<T>(0), static_cast<T>(-1));
+template <class T> const Vector2<T> Vector2<T>::Left = Vector2<T>(static_cast<T>(-1), static_cast<T>(0));
+template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(static_cast<T>(1), static_cast<T>(0));
+template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(static_cast<T>(0), static_cast<T>(0));
+template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(static_cast<T>(1), static_cast<T>(1));
  
 //------------------------------------------------------------------------------------------------------
 //STATIC function that creates a Vector2D object based on angle, size and axis passed
@@ -166,17 +158,13 @@ template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(1, 1);
 //}
 
 
-//------------------------------------------------------------------------------------------------------
-//constructor that assigns X and Y values
-//------------------------------------------------------------------------------------------------------
+//======================================================================================================
 template <class T> Vector2<T>::Vector2(T x, T y)
 {
-
-	this->x = static_cast<T>(x);
-	this->y = static_cast<T>(y);
-
+	this->x = x;
+	this->y = y;
 }
-
+//======================================================================================================
 
 
 //------------------------------------------------------------------------------------------------------
@@ -204,11 +192,11 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //------------------------------------------------------------------------------------------------------
 //function that assigns a value to a Vector2D object
 //------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T>& Vector2<T>::operator=(const T rhs)
+//template <class T> Vector2<T>& Vector2<T>::operator=(const T second)
 //{
 //
-//	x = rhs;
-//	y = rhs;
+//	x = second;
+//	y = second;
 //
 //	//return a reference of the vector object so that 
 //	//assignment chaining can be used as well
@@ -221,11 +209,11 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //------------------------------------------------------------------------------------------------------
 //function that assigns a value to a Vector2D object based on vector enum type passed
 //------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T>& Vector2D<T>::operator=(const VectorType rhs)
+//template <class T> Vector2D<T>& Vector2D<T>::operator=(const VectorType second)
 //{
 //
 //	//based on vector type assign the XY values accordingly
-//	switch (rhs)
+//	switch (second)
 //	{
 //		case ZERO:     { X = 0;  Y = 0;  break; }
 //		case LEFT:	   { X = -1; Y = 0;  break; }
@@ -239,303 +227,60 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //	return *this;
 //
 //}
-//------------------------------------------------------------------------------------------------------
-//function that adds a Vector2D object to a value using the + member function (GLOBAL)
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> operator+(const T lhs, Vector2D<T>& rhs)
-//{
-//
-//	return rhs + lhs;
-//
-//}
 
 
-
-
-//------------------------------------------------------------------------------------------------------
-//function that adds two Vector2D objects using the += member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T> Vector2<T>::operator+(const Vector2<T>& rhs) const
-//{
-//
-//	Vector2<T> result(*this);
-//	return (result += rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that adds a value to a Vector2D object using the += member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> Vector2D<T>::operator+(const T rhs)
-//{
-//
-//	Vector2D<T> result(*this);
-//	return (result += rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that adds and assigns a Vector2D to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& rhs)
-//{
-//
-//	x += rhs.x;
-//	y += rhs.y;
-//	
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that adds and assigns a value to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T>& Vector2D<T>::operator+=(const T rhs)
-//{
-//
-//	X += rhs;
-//	Y += rhs;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-//------------------------------------------------------------------------------------------------------
-//function that subtracts a Vector2D object from a value using the - member function (GLOBAL)
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> operator-(const T lhs, Vector2D<T>& rhs)
-//{
-//
-//	//create a temporary vector based on lhs passed value and then use -= function to subtract
-//	//this is because subtraction differs between lhs - rhs and rhs - lhs 
-//	//this method is the most efficient way to overcome this issue
-//	Vector2D<T> result(lhs, lhs);
-//	return (result -= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that subtracts two Vector2D objects using the -= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T> Vector2<T>::operator-(const Vector2<T>& rhs) const
-//{
-//
-//	Vector2<T> result(*this);
-//	return (result -= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that subtracts a value from a Vector2D object using the -= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> Vector2D<T>::operator-(const T rhs)
-//{
-//
-//	Vector2D<T> result(*this);
-//	return (result -= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that subtracts and assigns a Vector2D to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& rhs)
-//{
-//
-//	x -= rhs.x;
-//	y -= rhs.y;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that subtracts and assigns a value to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T>& Vector2D<T>::operator-=(const T rhs)
-//{
-//
-//	X -= rhs;
-//	Y -= rhs;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-//------------------------------------------------------------------------------------------------------
-//function that multiplies a value by a Vector2D object using the * member function (GLOBAL)
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> operator*(const T lhs, Vector2D<T>& rhs)
-//{
-//
-//	return rhs * lhs;
-//
-//}
-//------------------------------------------------------------------------------------------------------
-//function that multiplies two Vector2D objects using the *= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> Vector2D<T>::operator*(const Vector2D<T>& rhs) const
-//{
-//
-//	Vector2D<T> result(*this);
-//	return (result *= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that multiplies a Vector2D object by a value using the *= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T> Vector2<T>::operator*(const T rhs)
-//{
-//
-//	Vector2<T> result(*this);
-//	return (result *= rhs);
-//
-//}
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that multiplies and assigns a Vector2D to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T>& Vector2D<T>::operator*=(const Vector2D<T>& rhs)
-//{
-//
-//	X *= rhs.X;
-//	Y *= rhs.Y;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that multiplies and assigns a value to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T>& Vector2<T>::operator*=(const T rhs)
-//{
-//
-//	x *= rhs;
-//	y *= rhs;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that divides a value by a Vector2D object using the /= member function (GLOBAL)
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> operator/(const T lhs, Vector2D<T>& rhs)
-//{
-//
-//	//create a temporary vector based on lhs passed value and then use /= function to divide
-//	//this is because division differs between lhs / rhs and rhs / lhs 
-//	//this method is the most efficient way to overcome this issue
-//	Vector2D<T> result(lhs, lhs);
-//	return (result /= rhs);
-//
-//}
-//------------------------------------------------------------------------------------------------------
-//function that divides two Vector2D objects using the /= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T> Vector2D<T>::operator/(const Vector2D<T>& rhs) const
-//{
-//
-//	Vector2D<T> result(*this);
-//	return (result /= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that divides a Vector2D object by a value using the /= member function
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T> Vector2<T>::operator/(const T rhs)
-//{
-//
-//	Vector2<T> result(*this);
-//	return (result /= rhs);
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that divides and assigns a Vector2D to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2D<T>& Vector2D<T>::operator/=(const Vector2D<T>& rhs)
-//{
-//
-//	//first make sure that we do not divide by 0!
-//	if (rhs.X != 0) X /= rhs.X;
-//	if (rhs.Y != 0) Y /= rhs.Y;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-//function that divides and assigns a value to another Vector2D object
-//------------------------------------------------------------------------------------------------------
-//template <class T> Vector2<T>& Vector2<T>::operator/=(const T rhs)
-//{
-//
-//	//first make sure that we do not divide by 0!
-//	if (rhs != 0) x /= rhs;
-//	if (rhs != 0) y /= rhs;
-//
-//	//return a reference of the vector object so that 
-//	//assignment chaining can be used as well
-//	return *this;
-//
-//}
+//======================================================================================================
+template <class T> Vector2<T> Vector2<T>::operator+(const Vector2<T>& second) const
+{
+	Vector2<T> result(*this);
+    return (result += second);
+}
+//======================================================================================================
+template <class T> Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& second)
+{
+	x += second.x;
+	y += second.y;
+	return *this;
+}
+//======================================================================================================
+template <class T> Vector2<T> Vector2<T>::operator-(const Vector2<T>& second) const
+{
+	Vector2<T> result(*this);
+	return (result -= second);
+}
+//======================================================================================================
+template <class T> Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& second)
+{
+	x -= second.x;
+	y -= second.y;
+	return *this;
+}
+//======================================================================================================
+template <class T> Vector2<T> Vector2<T>::operator*(const T second) const
+{
+	Vector2<T> result(*this);
+	return (result *= second);
+}
+//======================================================================================================
+template <class T> Vector2<T>& Vector2<T>::operator*=(const T second)
+{
+	x *= second;
+	y *= second;
+	return *this;
+}
+//======================================================================================================
+template <class T> Vector2<T> Vector2<T>::operator/(const T second) const
+{
+	Vector2<T> result(*this);
+	return (result /= second);
+}
+//======================================================================================================
+template <class T> Vector2<T>& Vector2<T>::operator/=(const T second)
+{
+	if (second != 0) x /= second;
+	if (second != 0) y /= second;
+	return *this;
+}
 
 
 
@@ -623,29 +368,29 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //------------------------------------------------------------------------------------------------------
 //function that determines if two Vector2D objects are identical
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator==(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator==(const Vector2D<T>& second)
 //{
 //
-//	return (X == rhs.X && Y == rhs.Y);
+//	return (X == second.X && Y == second.Y);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is identical to a value
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator==(const T rhs)
+//template <class T> bool Vector2D<T>::operator==(const T second)
 //{
 //
-//	return (X == rhs && Y == rhs);
+//	return (X == second && Y == second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that checks if Vector2D object is a certain value based on vector enum type passed
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator==(const VectorType rhs)
+//template <class T> bool Vector2D<T>::operator==(const VectorType second)
 //{
 //
 //	//check the XY values individually to see if that vector type is active
-//	switch (rhs)
+//	switch (second)
 //	{
 //		case ZERO:     { return (X == 0 && Y == 0);  }
 //		case LEFT:	   { return (X == -1 && Y == 0); }
@@ -660,106 +405,106 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //------------------------------------------------------------------------------------------------------
 //function that determines if two Vector2D objects are unequal using the inverse of the == function
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator!=(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator!=(const Vector2D<T>& second)
 //{
 //
-//	return (!(*this == rhs));
+//	return (!(*this == second));
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is unequal to a value using the inv. of the == function
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator!=(const T rhs)
+//template <class T> bool Vector2D<T>::operator!=(const T second)
 //{
 //
-//	return (!(*this == rhs));
+//	return (!(*this == second));
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that checks if Vector2D object is not a certain value based on vector enum type passed
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator!=(const VectorType rhs)
+//template <class T> bool Vector2D<T>::operator!=(const VectorType second)
 //{
 //
 //	//use the == overloaded function and negate its result
 //	//this will oppose the == functionality and prevent repetitive code
-//	return !(*this == rhs);
+//	return !(*this == second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is smaller than another Vector2D object
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator<(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator<(const Vector2D<T>& second)
 //{
 //
-//	return (X < rhs.X && Y < rhs.Y);
+//	return (X < second.X && Y < second.Y);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is smaller than a value
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator<(const T rhs)
+//template <class T> bool Vector2D<T>::operator<(const T second)
 //{
 //
-//	return (X < rhs && Y < rhs);
+//	return (X < second && Y < second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is smaller or equal to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator<=(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator<=(const Vector2D<T>& second)
 //{
 //
 //	//use the < and == member functions and return the result
-//	return (*this < rhs || *this == rhs);
+//	return (*this < second || *this == second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is smaller or equal to a value
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator<=(const T rhs)
+//template <class T> bool Vector2D<T>::operator<=(const T second)
 //{
 //
 //	//use the < and == member functions and return the result
-//	return (*this < rhs || *this == rhs);
+//	return (*this < second || *this == second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is bigger than another Vector2D object
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator>(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator>(const Vector2D<T>& second)
 //{
 //
-//	return (X > rhs.X && Y > rhs.Y);
+//	return (X > second.X && Y > second.Y);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is smaller than a value
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator>(const T rhs)
+//template <class T> bool Vector2D<T>::operator>(const T second)
 //{
 //
-//	return (X > rhs && Y > rhs);
+//	return (X > second && Y > second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is bigger than or equal to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator>=(const Vector2D<T>& rhs)
+//template <class T> bool Vector2D<T>::operator>=(const Vector2D<T>& second)
 //{
 //
 //	//use the > and == member functions and return the result
-//	return (*this > rhs || *this == rhs);
+//	return (*this > second || *this == second);
 //
 //}
 //------------------------------------------------------------------------------------------------------
 //function that determines if a Vector2D object is bigger than or equal to a value
 //------------------------------------------------------------------------------------------------------
-//template <class T> bool Vector2D<T>::operator>=(const T rhs)
+//template <class T> bool Vector2D<T>::operator>=(const T second)
 //{
 //
 //	//use the > and == member functions and return the result
-//	return (*this > rhs || *this == rhs);
+//	return (*this > second || *this == second);
 //
 //}
 
