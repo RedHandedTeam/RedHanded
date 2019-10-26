@@ -132,7 +132,7 @@ template <class T> T Vector2<T>::Magnitude() const
 //======================================================================================================
 template <class T> T Vector2<T>::SqrMagnitude() const
 {
-	return (x * x + y * y);
+	return x * x + y * y;
 }
 //======================================================================================================
 template <class T> T Vector2<T>::Distance(const Vector2<T>& second) const
@@ -142,26 +142,25 @@ template <class T> T Vector2<T>::Distance(const Vector2<T>& second) const
 //======================================================================================================
 template <class T> T Vector2<T>::Dot(const Vector2<T>& second) const
 {
-	return ((x * second.x) + (y * second.y));
+	return (x * second.x) + (y * second.y);
 }
 //======================================================================================================
 template <class T> Vector2<T> Vector2<T>::Normalize() const
 {
-	T length = Magnitude();
-	return *this / length;
+	return *this / Magnitude();
 }
 //======================================================================================================
 template <class T> Vector2<T> Vector2<T>::Lerp(const Vector2<T>& second, float delta) const
 {
-	return (*this * (1.0 - delta)) + (second * delta);
+	return *this + (second - *this) * delta;
 }
 //======================================================================================================
 template<class T> Vector2<T> Vector2<T>::Slerp(const Vector2<T>& second, float delta) const
 {
 	float dot = Dot(second);
+	dot = max(min(dot, 1), -1);
 	float angle = acos(dot) * delta;
-	Vector2<T> relative = second - (*this) * dot;
-	relative = relative.Normalize();
+	Vector2<T> relative = (second - *this * dot).Normalize();
 	return (*this * cos(angle)) + (relative * sin(angle));
 }
 
