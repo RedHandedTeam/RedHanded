@@ -12,6 +12,13 @@ template <class T> class Vector2
 
 public:
 
+	static const Vector2<T> Up;
+	static const Vector2<T> Down;
+	static const Vector2<T> Left;
+	static const Vector2<T> Right;
+	static const Vector2<T> Zero;
+	static const Vector2<T> One;
+
 	//static Vector2D<double> AngleToVector(double angle, double size = 100.0);
 	//static Vector2D<double> Lerp(Vector2<double>& firstVector,
 		//                         Vector2<double>& secondVector, double delta, double epsilon = 0.01);
@@ -91,8 +98,20 @@ public:
 	T x;
 	T y;
 
+	static int i;
+
 };
 
+
+//int Vector2::i = 10;
+
+template <class T> const Vector2<T> Vector2<T>::Up = Vector2<T>(0, 1);
+template <class T> const Vector2<T> Vector2<T>::Down = Vector2<T>(0, -1);
+template <class T> const Vector2<T> Vector2<T>::Left = Vector2<T>(-1, 0);
+template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(1, 0);
+template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(0, 0);
+template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(1, 1);
+ 
 //------------------------------------------------------------------------------------------------------
 //STATIC function that creates a Vector2D object based on angle, size and axis passed
 //------------------------------------------------------------------------------------------------------
@@ -145,16 +164,21 @@ public:
 //	return result;
 //
 //}
+
+
 //------------------------------------------------------------------------------------------------------
 //constructor that assigns X and Y values
 //------------------------------------------------------------------------------------------------------
 template <class T> Vector2<T>::Vector2(T x, T y)
 {
 
-	this->x = x;
-	this->y = y;
+	this->x = static_cast<T>(x);
+	this->y = static_cast<T>(y);
 
 }
+
+
+
 //------------------------------------------------------------------------------------------------------
 //second constructor that assigns X and Y values based on vector enum type passed
 //------------------------------------------------------------------------------------------------------
@@ -174,20 +198,26 @@ template <class T> Vector2<T>::Vector2(T x, T y)
 //	}
 //
 //}
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that assigns a value to a Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T>& Vector2<T>::operator=(const T rhs)
-{
+//template <class T> Vector2<T>& Vector2<T>::operator=(const T rhs)
+//{
+//
+//	x = rhs;
+//	y = rhs;
+//
+//	//return a reference of the vector object so that 
+//	//assignment chaining can be used as well
+//	return *this;
+//
+//}
 
-	x = rhs;
-	y = rhs;
 
-	//return a reference of the vector object so that 
-	//assignment chaining can be used as well
-	return *this;
 
-}
 //------------------------------------------------------------------------------------------------------
 //function that assigns a value to a Vector2D object based on vector enum type passed
 //------------------------------------------------------------------------------------------------------
@@ -218,16 +248,24 @@ template <class T> Vector2<T>& Vector2<T>::operator=(const T rhs)
 //	return rhs + lhs;
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that adds two Vector2D objects using the += member function
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::operator+(const Vector2<T>& rhs) const
-{
+//template <class T> Vector2<T> Vector2<T>::operator+(const Vector2<T>& rhs) const
+//{
+//
+//	Vector2<T> result(*this);
+//	return (result += rhs);
+//
+//}
 
-	Vector2<T> result(*this);
-	return (result += rhs);
 
-}
+
+
 //------------------------------------------------------------------------------------------------------
 //function that adds a value to a Vector2D object using the += member function
 //------------------------------------------------------------------------------------------------------
@@ -238,20 +276,28 @@ template <class T> Vector2<T> Vector2<T>::operator+(const Vector2<T>& rhs) const
 //	return (result += rhs);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that adds and assigns a Vector2D to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& rhs)
-{
+//template <class T> Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& rhs)
+//{
+//
+//	x += rhs.x;
+//	y += rhs.y;
+//	
+//	//return a reference of the vector object so that 
+//	//assignment chaining can be used as well
+//	return *this;
+//
+//}
 
-	x += rhs.x;
-	y += rhs.y;
-	
-	//return a reference of the vector object so that 
-	//assignment chaining can be used as well
-	return *this;
 
-}
+
+
 //------------------------------------------------------------------------------------------------------
 //function that adds and assigns a value to another Vector2D object
 //------------------------------------------------------------------------------------------------------
@@ -279,16 +325,24 @@ template <class T> Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& rhs)
 //	return (result -= rhs);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that subtracts two Vector2D objects using the -= member function
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::operator-(const Vector2<T>& rhs) const
-{
+//template <class T> Vector2<T> Vector2<T>::operator-(const Vector2<T>& rhs) const
+//{
+//
+//	Vector2<T> result(*this);
+//	return (result -= rhs);
+//
+//}
 
-	Vector2<T> result(*this);
-	return (result -= rhs);
 
-}
+
+
 //------------------------------------------------------------------------------------------------------
 //function that subtracts a value from a Vector2D object using the -= member function
 //------------------------------------------------------------------------------------------------------
@@ -299,20 +353,28 @@ template <class T> Vector2<T> Vector2<T>::operator-(const Vector2<T>& rhs) const
 //	return (result -= rhs);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that subtracts and assigns a Vector2D to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& rhs)
-{
+//template <class T> Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& rhs)
+//{
+//
+//	x -= rhs.x;
+//	y -= rhs.y;
+//
+//	//return a reference of the vector object so that 
+//	//assignment chaining can be used as well
+//	return *this;
+//
+//}
 
-	x -= rhs.x;
-	y -= rhs.y;
 
-	//return a reference of the vector object so that 
-	//assignment chaining can be used as well
-	return *this;
 
-}
+
 //------------------------------------------------------------------------------------------------------
 //function that subtracts and assigns a value to another Vector2D object
 //------------------------------------------------------------------------------------------------------
@@ -346,16 +408,23 @@ template <class T> Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& rhs)
 //	return (result *= rhs);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that multiplies a Vector2D object by a value using the *= member function
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::operator*(const T rhs)
-{
+//template <class T> Vector2<T> Vector2<T>::operator*(const T rhs)
+//{
+//
+//	Vector2<T> result(*this);
+//	return (result *= rhs);
+//
+//}
 
-	Vector2<T> result(*this);
-	return (result *= rhs);
 
-}
+
 //------------------------------------------------------------------------------------------------------
 //function that multiplies and assigns a Vector2D to another Vector2D object
 //------------------------------------------------------------------------------------------------------
@@ -370,20 +439,28 @@ template <class T> Vector2<T> Vector2<T>::operator*(const T rhs)
 //	return *this;
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that multiplies and assigns a value to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T>& Vector2<T>::operator*=(const T rhs)
-{
+//template <class T> Vector2<T>& Vector2<T>::operator*=(const T rhs)
+//{
+//
+//	x *= rhs;
+//	y *= rhs;
+//
+//	//return a reference of the vector object so that 
+//	//assignment chaining can be used as well
+//	return *this;
+//
+//}
 
-	x *= rhs;
-	y *= rhs;
 
-	//return a reference of the vector object so that 
-	//assignment chaining can be used as well
-	return *this;
 
-}
+
 //------------------------------------------------------------------------------------------------------
 //function that divides a value by a Vector2D object using the /= member function (GLOBAL)
 //------------------------------------------------------------------------------------------------------
@@ -407,16 +484,24 @@ template <class T> Vector2<T>& Vector2<T>::operator*=(const T rhs)
 //	return (result /= rhs);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that divides a Vector2D object by a value using the /= member function
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::operator/(const T rhs)
-{
+//template <class T> Vector2<T> Vector2<T>::operator/(const T rhs)
+//{
+//
+//	Vector2<T> result(*this);
+//	return (result /= rhs);
+//
+//}
 
-	Vector2<T> result(*this);
-	return (result /= rhs);
 
-}
+
+
 //------------------------------------------------------------------------------------------------------
 //function that divides and assigns a Vector2D to another Vector2D object
 //------------------------------------------------------------------------------------------------------
@@ -432,21 +517,29 @@ template <class T> Vector2<T> Vector2<T>::operator/(const T rhs)
 //	return *this;
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that divides and assigns a value to another Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T>& Vector2<T>::operator/=(const T rhs)
-{
+//template <class T> Vector2<T>& Vector2<T>::operator/=(const T rhs)
+//{
+//
+//	//first make sure that we do not divide by 0!
+//	if (rhs != 0) x /= rhs;
+//	if (rhs != 0) y /= rhs;
+//
+//	//return a reference of the vector object so that 
+//	//assignment chaining can be used as well
+//	return *this;
+//
+//}
 
-	//first make sure that we do not divide by 0!
-	if (rhs != 0) x /= rhs;
-	if (rhs != 0) y /= rhs;
 
-	//return a reference of the vector object so that 
-	//assignment chaining can be used as well
-	return *this;
 
-}
+
 //------------------------------------------------------------------------------------------------------
 //function that increments a Vector2D object using the prefix method
 //------------------------------------------------------------------------------------------------------
@@ -505,21 +598,28 @@ template <class T> Vector2<T>& Vector2<T>::operator/=(const T rhs)
 //	return temp;
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that negates a Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::operator-()
-{
+//template <class T> Vector2<T> Vector2<T>::operator-()
+//{
+//
+//	Vector2<T> temp(-x, -y);
+//
+//	//make sure there is no -0
+//	if (temp.x == -0) temp.x = 0;
+//	if (temp.y == -0) temp.y = 0;
+//
+//	return temp;
+//
+//}
 
-	Vector2<T> temp(-x, -y);
 
-	//make sure there is no -0
-	if (temp.x == -0) temp.x = 0;
-	if (temp.y == -0) temp.y = 0;
 
-	return temp;
-
-}
 //------------------------------------------------------------------------------------------------------
 //function that determines if two Vector2D objects are identical
 //------------------------------------------------------------------------------------------------------
@@ -662,54 +762,69 @@ template <class T> Vector2<T> Vector2<T>::operator-()
 //	return (*this > rhs || *this == rhs);
 //
 //}
+
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that calculates the length of a Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> T Vector2<T>::Magnitude()
-{
+//template <class T> T Vector2<T>::Magnitude()
+//{
+//
+//	return (T)(sqrt(LengthSquared()));
+//
+//}
+////------------------------------------------------------------------------------------------------------
+////function that calculates the squared length of a Vector2D object
+////------------------------------------------------------------------------------------------------------
+//template <class T> T Vector2<T>::SqrMagnitude()
+//{
+//
+//	return (x * x + y * y);
+//
+//}
 
-	return (T)(sqrt(LengthSquared()));
 
-}
-//------------------------------------------------------------------------------------------------------
-//function that calculates the squared length of a Vector2D object
-//------------------------------------------------------------------------------------------------------
-template <class T> T Vector2<T>::SqrMagnitude()
-{
 
-	return (x * x + y * y);
 
-}
+
 //------------------------------------------------------------------------------------------------------
 //function that calculates the distance between two Vector2D objects
 //------------------------------------------------------------------------------------------------------
-template <class T> T Vector2<T>::Distance(const Vector2<T>& secondVector)
-{
+//template <class T> T Vector2<T>::Distance(const Vector2<T>& secondVector)
+//{
+//
+//	Vector2<T> temp(*this);
+//	temp -= secondVector;
+//	return temp.Length();
+//
+//}
+////------------------------------------------------------------------------------------------------------
+////function that calculates the dot product of two Vector2D objects
+////------------------------------------------------------------------------------------------------------
+//template <class T> T Vector2<T>::Dot(const Vector2<T>& secondVector) const
+//{
+//
+//	return ((x * secondVector.x) + (y * secondVector.y));
+//
+//}
+////------------------------------------------------------------------------------------------------------
+////function that assigns all components of Vector2D object at once
+////------------------------------------------------------------------------------------------------------
+//template <class T> void Vector2<T>::Set(T x, T y)
+//{
+//
+//	this->x = x;
+//	this->y = y;
+//
+//}
 
-	Vector2<T> temp(*this);
-	temp -= secondVector;
-	return temp.Length();
 
-}
-//------------------------------------------------------------------------------------------------------
-//function that calculates the dot product of two Vector2D objects
-//------------------------------------------------------------------------------------------------------
-template <class T> T Vector2<T>::Dot(const Vector2<T>& secondVector) const
-{
 
-	return ((x * secondVector.x) + (y * secondVector.y));
 
-}
-//------------------------------------------------------------------------------------------------------
-//function that assigns all components of Vector2D object at once
-//------------------------------------------------------------------------------------------------------
-template <class T> void Vector2<T>::Set(T x, T y)
-{
 
-	this->x = x;
-	this->y = y;
-
-}
 //------------------------------------------------------------------------------------------------------
 //function that calculates the angle in degrees between two Vector2D objects
 //------------------------------------------------------------------------------------------------------
@@ -729,22 +844,29 @@ template <class T> void Vector2<T>::Set(T x, T y)
 //	return (radian / 3.14159265359 * 180.0);
 //
 //}
+
+
+
+
 //------------------------------------------------------------------------------------------------------
 //function that normalises a Vector2D object
 //------------------------------------------------------------------------------------------------------
-template <class T> Vector2<T> Vector2<T>::Normalize() const
-{
+//template <class T> Vector2<T> Vector2<T>::Normalize() const
+//{
+//
+//	Vector2<T> temp(*this);
+//
+//	T length = temp.Length();
+//
+//	temp.x /= length;
+//	temp.y /= length;
+//
+//	return temp;
+//
+//}
 
-	Vector2<T> temp(*this);
 
-	T length = temp.Length();
 
-	temp.x /= length;
-	temp.y /= length;
-
-	return temp;
-
-}
 //------------------------------------------------------------------------------------------------------
 //function that converts the Vector2D object to a Vector3D object
 //------------------------------------------------------------------------------------------------------
