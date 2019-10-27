@@ -31,7 +31,7 @@ public:
 	Vector2<T> operator/(const T second) const;
 	Vector2<T>& operator/=(const T second);
 
-	Vector2<T> operator-();
+	Vector2<T> operator-() const;
 	
 public:
 
@@ -48,15 +48,14 @@ public:
 
 	T x;
 	T y;
-
 };
 
-template <class T> const Vector2<T> Vector2<T>::Up = Vector2<T>(static_cast<T>(0), static_cast<T>(1));
-template <class T> const Vector2<T> Vector2<T>::Down = Vector2<T>(static_cast<T>(0), static_cast<T>(-1));
-template <class T> const Vector2<T> Vector2<T>::Left = Vector2<T>(static_cast<T>(-1), static_cast<T>(0));
-template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(static_cast<T>(1), static_cast<T>(0));
-template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(static_cast<T>(0), static_cast<T>(0));
-template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(static_cast<T>(1), static_cast<T>(1));
+template <class T> const Vector2<T> Vector2<T>::Up = Vector2<T>(0, 1);
+template <class T> const Vector2<T> Vector2<T>::Down = Vector2<T>(0, -1);
+template <class T> const Vector2<T> Vector2<T>::Left = Vector2<T>(-1, 0);
+template <class T> const Vector2<T> Vector2<T>::Right = Vector2<T>(1, 0);
+template <class T> const Vector2<T> Vector2<T>::Zero = Vector2<T>(0, 0);
+template <class T> const Vector2<T> Vector2<T>::One = Vector2<T>(1, 1);
  
 //======================================================================================================
 template <class T> Vector2<T>::Vector2(T x, T y)
@@ -117,7 +116,7 @@ template <class T> Vector2<T>& Vector2<T>::operator/=(const T second)
 	return *this;
 }
 //======================================================================================================
-template <class T> Vector2<T> Vector2<T>::operator-()
+template <class T> Vector2<T> Vector2<T>::operator-() const
 {
 	Vector2<T> result(-x, -y);
 	if (result.x == -0) result.x = 0;
@@ -127,12 +126,12 @@ template <class T> Vector2<T> Vector2<T>::operator-()
 //======================================================================================================
 template <class T> T Vector2<T>::Magnitude() const
 {
-	return static_cast<T>(sqrt(SqrMagnitude()));
+	return sqrtf(SqrMagnitude()));
 }
 //======================================================================================================
 template <class T> T Vector2<T>::SqrMagnitude() const
 {
-	return x * x + y * y;
+	return (x * x) + (y * y);
 }
 //======================================================================================================
 template <class T> T Vector2<T>::Distance(const Vector2<T>& second) const
@@ -159,9 +158,9 @@ template<class T> Vector2<T> Vector2<T>::Slerp(const Vector2<T>& second, float d
 {
 	float dot = Dot(second);
 	dot = max(min(dot, 1), -1);
-	float angle = acos(dot) * delta;
+	float angle = acosf(dot) * delta;
 	Vector2<T> relative = (second - *this * dot).Normalize();
-	return (*this * cos(angle)) + (relative * sin(angle));
+	return (*this * cosf(angle)) + (relative * sinf(angle));
 }
 
 #endif
