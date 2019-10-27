@@ -33,7 +33,7 @@ public:
 	Vector3<T> operator/(const T second) const;
 	Vector3<T>& operator/=(const T second);
 
-	Vector3<T> operator-();
+	Vector3<T> operator-() const;
 
 public:
 
@@ -54,14 +54,14 @@ public:
 	T z;
 };
 
-template <class T> const Vector3<T> Vector3<T>::Up = Vector3<T>(static_cast<T>(0), static_cast<T>(1), static_cast<T>(0));
-template <class T> const Vector3<T> Vector3<T>::Down = Vector3<T>(static_cast<T>(0), static_cast<T>(-1), static_cast<T>(0));
-template <class T> const Vector3<T> Vector3<T>::Left = Vector3<T>(static_cast<T>(-1), static_cast<T>(0), static_cast<T>(0));
-template <class T> const Vector3<T> Vector3<T>::Right = Vector3<T>(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
-template <class T> const Vector3<T> Vector3<T>::Forward = Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
-template <class T> const Vector3<T> Vector3<T>::Back = Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(-1));
-template <class T> const Vector3<T> Vector3<T>::Zero = Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0));
-template <class T> const Vector3<T> Vector3<T>::One = Vector3<T>(static_cast<T>(1), static_cast<T>(1), static_cast<T>(1));
+template <class T> const Vector3<T> Vector3<T>::Up = Vector3<T>(0, 1, 0);
+template <class T> const Vector3<T> Vector3<T>::Down = Vector3<T>(0, -1, 0);
+template <class T> const Vector3<T> Vector3<T>::Left = Vector3<T>(-1, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::Right = Vector3<T>(1, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::Forward = Vector3<T>(0, 0, 1);
+template <class T> const Vector3<T> Vector3<T>::Back = Vector3<T>(0, 0, -1);
+template <class T> const Vector3<T> Vector3<T>::Zero = Vector3<T>(0, 0, 0);
+template <class T> const Vector3<T> Vector3<T>::One = Vector3<T>(1, 1, 1);
 
 //======================================================================================================
 template <class T> Vector3<T>::Vector3(T x, T y, T z)
@@ -127,7 +127,7 @@ template <class T> Vector3<T>& Vector3<T>::operator/=(const T second)
 	return *this;
 }
 //======================================================================================================
-template <class T> Vector3<T> Vector3<T>::operator-()
+template <class T> Vector3<T> Vector3<T>::operator-() const
 {
 	Vector3<T> result(-x, -y, -z);
 	if (result.x == -0) result.x = 0;
@@ -138,12 +138,12 @@ template <class T> Vector3<T> Vector3<T>::operator-()
 //======================================================================================================
 template <class T> T Vector3<T>::Magnitude() const
 {
-	return static_cast<T>(sqrt(SqrMagnitude()));
+	return sqrtf(SqrMagnitude());
 }
 //======================================================================================================
 template <class T> T Vector3<T>::SqrMagnitude() const
 {
-	return x * x + y * y + z * z;
+	return (x * x) + (y * y) + (z * z);
 }
 //======================================================================================================
 template <class T> T Vector3<T>::Distance(const Vector3<T>& second) const
@@ -163,10 +163,9 @@ template <class T> Vector3<T> Vector3<T>::Normalize() const
 //======================================================================================================
 template <class T> Vector3<T> Vector3<T>::Cross(const Vector3<T>& second) const
 {
-	Vector3<T> result(y * second.z - z * second.y,
+	return Vector3<T>(y * second.z - z * second.y,
 					  z * second.x - x * second.z,
 					  x * second.y - y * second.x);
-	return result;
 }
 //======================================================================================================
 template <class T> Vector3<T> Vector3<T>::Lerp(const Vector3<T>& second, float delta) const
@@ -178,9 +177,9 @@ template<class T> Vector3<T> Vector3<T>::Slerp(const Vector3<T>& second, float d
 {
 	float dot = Dot(second);
 	dot = max(min(dot, 1), -1);
-	float angle = acos(dot) * delta;
+	float angle = acosf(dot) * delta;
 	Vector3<T> relative = (second - *this * dot).Normalize();
-	return (*this * cos(angle)) + (relative * sin(angle));
+	return (*this * cosf(angle)) + (relative * sinf(angle));
 }
 
 #endif
