@@ -46,7 +46,7 @@ public:
 	Quaternion Normalize() const;
 	Quaternion Slerp(const Quaternion& second, float delta) const;
 
-public :
+public:
 
 	Vector3<float> xyz;
 	float w;
@@ -55,7 +55,7 @@ public :
 const Quaternion Quaternion::Identity = Quaternion(0, 0, 0, 1);
 
 //======================================================================================================
-Quaternion::Quaternion(float x, float y, float z,float w)
+Quaternion::Quaternion(float x, float y, float z, float w)
 {
 	this->xyz = Vector3<float>(x, y, z);
 	this->w = w;

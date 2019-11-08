@@ -52,16 +52,16 @@ public:
 	
 	Color operator-() const;
 
+private:
+
+	float Magnitude() const;
+	float SqrMagnitude() const;
+	
 public:
 
-	/*Color& Lerp(Color& secondColor, GLfloat delta, GLfloat epsilon = 0.01f);
-	Color& Lerp(ColorType secondColor, GLfloat delta, GLfloat epsilon = 0.01f);
-	Color& Lerp(GLfloat secondAlpha, GLfloat delta, GLfloat epsilon = 0.01f);*/
-
-public:
-
-	void Clamp() //??
-
+	Color Normalize() const;
+	Color& Lerp(Color& second, float delta) const;
+	
 public:
 
 	float r;
@@ -104,7 +104,6 @@ Color& Color::operator+=(const Color& second)
 	r += second.r;
 	g += second.g;
 	b += second.b;
-	a += second.a;
 	return *this;
 }
 //======================================================================================================
@@ -119,7 +118,6 @@ Color& Color::operator+=(const float second);
 	r += second;
 	g += second;
 	b += second;
-	a += second;
 	return *this;
 }
 //======================================================================================================
@@ -134,7 +132,6 @@ Color& Color::operator-=(const Color& second)
 	r -= second.r;
 	g -= second.g;
 	b -= second.b;
-	a -= second.a;
 	return *this;
 }
 //======================================================================================================
@@ -149,7 +146,6 @@ Color& Color::operator-=(const float second);
 	r -= second;
 	g -= second;
 	b -= second;
-	a -= second;
 	return *this;
 }
 //======================================================================================================
@@ -215,8 +211,28 @@ Color& Color::operator/=(const float second);
 //======================================================================================================
 Color operator-() const;
 {
-	Color result(1 - r, 1 - g, 1 - b, 1 - a);
+	Color result(1 - r, 1 - g, 1 - b);
 	return result;
+}
+//======================================================================================================
+float Color::Magnitude() const;
+{
+	return sqrtf(SqrMagnitude());
+}
+//======================================================================================================
+float Color::SqrMagnitude() const;
+{
+	return (r * r) + (g * g) + (b * b);
+}
+//======================================================================================================
+Color Color::Normalize() const;
+{
+	return *this / Magnitude();
+}
+//======================================================================================================
+Color& Color::Lerp(Color& second, float delta) const;
+{
+	return *this + (second - *this) * delta;
 }
 
 #endif
