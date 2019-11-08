@@ -18,16 +18,16 @@ public:
 public:
 
 	Quaternion operator+(const Quaternion& second) const;
-	Quaternion operator+=(const Quaternion& second);
+	Quaternion& operator+=(const Quaternion& second);
 
 	Quaternion operator-(const Quaternion& second) const;
-	Quaternion operator-=(const Quaternion& second);
+	Quaternion& operator-=(const Quaternion& second);
 	
 	Quaternion operator*(const Quaternion& second) const;
-	Quaternion operator*=(const Quaternion& second);
+	Quaternion& operator*=(const Quaternion& second);
 
 	Quaternion operator/(const Quaternion& second) const;
-	Quaternion operator/=(const Quaternion& second);
+	Quaternion& operator/=(const Quaternion& second);
 
 	Quaternion operator*(const float& second) const;
 	Quaternion operator/(const float& second) const;
@@ -73,7 +73,7 @@ Quaternion Quaternion::operator+(const Quaternion& second) const
 	return (result += second);
 }
 //======================================================================================================
-Quaternion Quaternion::operator+=(const Quaternion& second)
+Quaternion& Quaternion::operator+=(const Quaternion& second)
 {
 	xyz += second.xyz;
 	w += second.w;
@@ -86,7 +86,7 @@ Quaternion Quaternion::operator-(const Quaternion& second) const
 	return (result -= second);
 }
 //======================================================================================================
-Quaternion Quaternion::operator-=(const Quaternion& second)
+Quaternion& Quaternion::operator-=(const Quaternion& second)
 {
 	xyz -= second.xyz;
 	w -= second.w;
@@ -99,7 +99,7 @@ Quaternion Quaternion::operator*(const Quaternion& second) const
 	return (result *= second);
 }
 //======================================================================================================
-Quaternion Quaternion::operator*=(const Quaternion& second)
+Quaternion& Quaternion::operator*=(const Quaternion& second)
 {
 	Vector3<float> imaginary = second.xyz * w + xyz * second.w + xyz.Cross(second.xyz);
 	w = w * second.w - xyz.Dot(second.xyz);
@@ -113,7 +113,7 @@ Quaternion Quaternion::operator/(const Quaternion& second) const
 	return (result /= second);
 }
 //======================================================================================================
-Quaternion Quaternion::operator/=(const Quaternion& second)
+Quaternion& Quaternion::operator/=(const Quaternion& second)
 {
 	return *this *= second.Inverse();
 }
