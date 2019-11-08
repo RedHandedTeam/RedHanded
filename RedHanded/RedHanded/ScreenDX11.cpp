@@ -40,6 +40,8 @@ bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS r
 	swapChainDescriptor.Windowed = true;
 	swapChainDescriptor.BufferCount = 2;
 	swapChainDescriptor.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	swapChainDescriptor.BufferDesc.Width = m_width;
+	swapChainDescriptor.BufferDesc.Height = m_height;
 	swapChainDescriptor.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDescriptor.SampleDesc.Count = 1;   
 	swapChainDescriptor.SampleDesc.Quality = 0; 
