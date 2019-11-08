@@ -209,7 +209,7 @@ Color& Color::operator/=(const float second);
 	return *this;
 }
 //======================================================================================================
-Color operator-() const;
+Color Color::operator-() const;
 {
 	Color result(1 - r, 1 - g, 1 - b);
 	return result;
