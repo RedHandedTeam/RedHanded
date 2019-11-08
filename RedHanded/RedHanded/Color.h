@@ -60,7 +60,7 @@ private:
 public:
 
 	Color Normalize() const;
-	Color& Lerp(Color& second, float delta) const;
+	Color Lerp(const Color& second, float delta) const;
 	
 public:
 
@@ -107,13 +107,13 @@ Color& Color::operator+=(const Color& second)
 	return *this;
 }
 //======================================================================================================
-Color Color::operator+(const float second) const;
+Color Color::operator+(const float second) const
 {
 	Color result(*this);
 	return (result += second);
 }
 //======================================================================================================
-Color& Color::operator+=(const float second);
+Color& Color::operator+=(const float second)
 {
 	r += second;
 	g += second;
@@ -135,13 +135,13 @@ Color& Color::operator-=(const Color& second)
 	return *this;
 }
 //======================================================================================================
-Color Color::operator-(const float second) const;
+Color Color::operator-(const float second) const
 {
 	Color result(*this);
 	return (result -= second);
 }
 //======================================================================================================
-Color& Color::operator-=(const float second);
+Color& Color::operator-=(const float second)
 {
 	r -= second;
 	g -= second;
@@ -164,13 +164,13 @@ Color& Color::operator*=(const Color& second)
 	return *this;
 }
 //======================================================================================================
-Color Color::operator*(const float second) const;
+Color Color::operator*(const float second) const
 {
 	Color result(*this);
 	return (result *= second);
 }
 //======================================================================================================
-Color& Color::operator*=(const float second);
+Color& Color::operator*=(const float second)
 {
 	r *= second;
 	g *= second;
@@ -194,13 +194,13 @@ Color& Color::operator/=(const Color& second)
 	return *this;
 }
 //======================================================================================================
-Color Color::operator/(const float second) const;
+Color Color::operator/(const float second) const
 {
 	Color result(*this);
 	return (result /= second);
 }
 //======================================================================================================
-Color& Color::operator/=(const float second);
+Color& Color::operator/=(const float second)
 {
 	r /= second;
 	g /= second;
@@ -209,28 +209,28 @@ Color& Color::operator/=(const float second);
 	return *this;
 }
 //======================================================================================================
-Color Color::operator-() const;
+Color Color::operator-() const
 {
 	Color result(1 - r, 1 - g, 1 - b);
 	return result;
 }
 //======================================================================================================
-float Color::Magnitude() const;
+float Color::Magnitude() const
 {
 	return sqrtf(SqrMagnitude());
 }
 //======================================================================================================
-float Color::SqrMagnitude() const;
+float Color::SqrMagnitude() const
 {
 	return (r * r) + (g * g) + (b * b);
 }
 //======================================================================================================
-Color Color::Normalize() const;
+Color Color::Normalize() const
 {
 	return *this / Magnitude();
 }
 //======================================================================================================
-Color& Color::Lerp(Color& second, float delta) const;
+Color Color::Lerp(const Color& second, float delta) const
 {
 	return *this + (second - *this) * delta;
 }
