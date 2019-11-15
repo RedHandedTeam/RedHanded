@@ -3,6 +3,8 @@
 
 #include "Vector3.h"
 
+#define PI = 3.14159265359;
+
 class Quaternion
 {
 
@@ -13,9 +15,9 @@ public:
 public:
 
 	Quaternion(float x = 0, float y = 0, float z = 0, float w = 1);
-	Quaternion(Vector3<float> xyz = Vector3<float>::Zero, float w = 1);
+	Quaternion(Vector3<float> axis, float angle);
 	
-public:
+private:
 
 	Quaternion operator+(const Quaternion& second) const;
 	Quaternion& operator+=(const Quaternion& second);
@@ -23,14 +25,16 @@ public:
 	Quaternion operator-(const Quaternion& second) const;
 	Quaternion& operator-=(const Quaternion& second);
 	
+	Quaternion operator*(const float& second) const;
+	Quaternion operator/(const float& second) const;
+
+public:
+
 	Quaternion operator*(const Quaternion& second) const;
 	Quaternion& operator*=(const Quaternion& second);
 
 	Quaternion operator/(const Quaternion& second) const;
 	Quaternion& operator/=(const Quaternion& second);
-
-	Quaternion operator*(const float& second) const;
-	Quaternion operator/(const float& second) const;
 
 	Vector3<float> operator*(const Vector3<float>& second) const;
 
@@ -61,10 +65,16 @@ Quaternion::Quaternion(float x, float y, float z, float w)
 	this->w = w;
 }
 //======================================================================================================
-Quaternion::Quaternion(Vector3<float> xyz, float w)
+Quaternion::Quaternion(Vector3<float> axis, float angle)
 {
-	this->xyz = xyz;
-	this->w = w;
+	double radian = angle / 180.0 * PI;
+	double sinThetaOverTwo = sinf(radian / 2.0f);
+	double cosThetaOverTwo = cosf(radian / 2.0f);
+
+	w = cosThetaOverTwo;
+	xyz.x *= sinThetaOverTwo;
+	xyz.y *= sinThetaOverTwo;
+	xyz.z *= sinThetaOverTwo;
 }
 //======================================================================================================
 Quaternion Quaternion::operator+(const Quaternion& second) const
@@ -93,6 +103,16 @@ Quaternion& Quaternion::operator-=(const Quaternion& second)
 	return *this;
 }
 //======================================================================================================
+Quaternion Quaternion::operator*(const float& second) const
+{
+	return Quaternion(xyz * second, w * second);
+}
+//======================================================================================================
+Quaternion Quaternion::operator/(const float& second) const
+{
+	return Quaternion(xyz / second, w / second);
+}
+//======================================================================================================
 Quaternion Quaternion::operator*(const Quaternion& second) const
 {
 	Quaternion result(*this);
@@ -118,16 +138,6 @@ Quaternion& Quaternion::operator/=(const Quaternion& second)
 	return *this *= second.Inverse();
 }
 //======================================================================================================
-Quaternion Quaternion::operator*(const float& second) const
-{
-	return Quaternion(xyz * second, w * second);
-}
-//======================================================================================================
-Quaternion Quaternion::operator/(const float& second) const
-{
-	return Quaternion(xyz / second, w / second);
-}
-//======================================================================================================
 Vector3<float> Quaternion::operator*(const Vector3<float>& second) const
 {
 	Vector3<float> cross = xyz.Cross(second) * 2;
@@ -146,7 +156,7 @@ float Quaternion::SqrMagnitude() const
 //======================================================================================================
 float Quaternion::Angle(const Quaternion& second) const
 {
-	return 2 * acosf((Inverse() * second).w) * (180 / 3.14);
+	return 2 * acosf((Inverse() * second).w) * (180 / PI);
 }
 //======================================================================================================
 float Quaternion::Dot(const Quaternion& second) const
