@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 #include "Vector3.h"
-//#include "Quaternion.h"
+#include "Quaternion.h"
 
 class Matrix
 {
@@ -14,19 +14,28 @@ public:
 public:
 
 	Matrix();
-	
+	Matrix(const Quaternion& quaternion);
+	Matrix(const Vector3<float>& xAxis,
+		   const Vector3<float>& yAxis,
+		   const Vector3<float>& zAxis);
+
 public:
 
 	float& operator[](int index);
+
 	Matrix operator*(Matrix& second);
 	Matrix& operator*=(Matrix& second);
 
-    Vector3<float> operator*(const Vector3<float>& second);
-    //Quaternion operator*(const Quaternion& second);
+	Vector3<float> operator*(const Vector3<float>& second);
+  
+private:
+
+	float Minor(int row0, int row1, int row2, int col0, int col1, int col2);
 
 public:
 
 	Matrix Inverse();
+	Matrix Transpose();
 
 private:
 
@@ -39,17 +48,41 @@ const Matrix Matrix::Identity = Matrix();
 //======================================================================================================
 Matrix::Matrix()
 {
+	m_matrix[0] = 1.0f; m_matrix[4] = 0.0f; m_matrix[8] = 0.0f;  m_matrix[12] = 0.0f;
+	m_matrix[1] = 0.0f;	m_matrix[5] = 1.0f; m_matrix[9] = 0.0f;	 m_matrix[13] = 0.0f;
+	m_matrix[2] = 0.0f;	m_matrix[6] = 0.0f; m_matrix[10] = 1.0f; m_matrix[14] = 0.0f;
+	m_matrix[3] = 0.0f;	m_matrix[7] = 0.0f; m_matrix[11] = 0.0f; m_matrix[15] = 1.0f;
+}
+//======================================================================================================
+Matrix::Matrix(const Quaternion& quaternion)
+{
+	m_matrix[0] = (float)(1.0f - 2.0f * (quaternion.xyz.y * quaternion.xyz.y + quaternion.xyz.z * quaternion.xyz.z));
+	m_matrix[1] = (float)(2.0f *		(quaternion.xyz.x * quaternion.xyz.y + quaternion.xyz.z * quaternion.w));
+	m_matrix[2] = (float)(2.0f *		(quaternion.xyz.x * quaternion.xyz.z - quaternion.xyz.y * quaternion.w));
+	m_matrix[3] = 0.0f;
 
-	for (int i = 0; i < 16; i++)
-	{
-		m_matrix[i] = 0.0f;
-	}
+	m_matrix[4] = (float)(2.0f *		(quaternion.xyz.x * quaternion.xyz.y - quaternion.xyz.z * quaternion.w));
+	m_matrix[5] = (float)(1.0f - 2.0f * (quaternion.xyz.x * quaternion.xyz.x + quaternion.xyz.z * quaternion.xyz.z));
+	m_matrix[6] = (float)(2.0f *		(quaternion.xyz.z * quaternion.xyz.y + quaternion.xyz.x * quaternion.w));
+	m_matrix[7] = 0.0f;
 
-	m_matrix[0] = 1.0f;
-	m_matrix[5] = 1.0f;
-	m_matrix[10] = 1.0f;
+	m_matrix[8]  = (float)(2.0f *		 (quaternion.xyz.x * quaternion.xyz.z + quaternion.xyz.y * quaternion.w));
+	m_matrix[9]  = (float)(2.0f *		 (quaternion.xyz.y * quaternion.xyz.z - quaternion.xyz.x * quaternion.w));
+	m_matrix[10] = (float)(1.0f - 2.0f * (quaternion.xyz.x * quaternion.xyz.x + quaternion.xyz.y * quaternion.xyz.y));
+	m_matrix[11] = 0.0f;
+
+	m_matrix[12] = 0.0f;
+	m_matrix[13] = 0.0f;
+	m_matrix[14] = 0.0f;
 	m_matrix[15] = 1.0f;
-
+}
+//======================================================================================================
+Matrix::Matrix(const Vector3<float>& xAxis, const Vector3<float>& yAxis, const Vector3<float>& zAxis)
+{
+	m_matrix[0] = xAxis.x; m_matrix[4] = xAxis.y; m_matrix[8]  = xAxis.z; m_matrix[12] = 0.0f;
+	m_matrix[1] = yAxis.x; m_matrix[5] = yAxis.y; m_matrix[9]  = yAxis.z; m_matrix[13] = 0.0f;
+	m_matrix[2] = zAxis.x; m_matrix[6] = zAxis.y; m_matrix[10] = zAxis.z; m_matrix[14] = 0.0f;
+	m_matrix[3] = 0.0f;	   m_matrix[7] = 0.0f;	  m_matrix[11] = 0.0f;	  m_matrix[15] = 1.0f;
 }
 //======================================================================================================
 float& Matrix::operator[](int index) 
@@ -68,6 +101,7 @@ Matrix& Matrix::operator*=(Matrix& second)
 	int count = 0;
 	float rowFirst[4];
 	float colSecond[4];
+	Matrix result;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -76,7 +110,6 @@ Matrix& Matrix::operator*=(Matrix& second)
 		colSecond[2] = second[i * 4 + 2];
 		colSecond[3] = second[i * 4 + 3];
 
-		
 		for (int j = 0; j < 4; j++)
 		{
 			rowFirst[0] = m_matrix[j];
@@ -84,14 +117,13 @@ Matrix& Matrix::operator*=(Matrix& second)
 			rowFirst[2] = m_matrix[j + 8];
 			rowFirst[3] = m_matrix[j + 12];
 
-
-			m_matrix[count++] = rowFirst[0] * colSecond[0] +
+			result[count++] = rowFirst[0] * colSecond[0] +
 								rowFirst[1] * colSecond[1] +
 								rowFirst[2] * colSecond[2] +
 								rowFirst[3] * colSecond[3];
 		}
 	}
-
+	*this = result;
 	return *this;
 }
 //======================================================================================================
@@ -99,7 +131,7 @@ Vector3<float> Matrix::operator*(const Vector3<float>& second)
 {
 	int count = 0;
 	float rowFirst[4];
-	float tempResult[3];
+	float tempResult[4];
 	Vector3<float> result;
 
 	for (int i = 0; i < 4; i++)
@@ -111,7 +143,8 @@ Vector3<float> Matrix::operator*(const Vector3<float>& second)
 
 		tempResult[count++] = rowFirst[0] * second.x +
 							  rowFirst[1] * second.y +
-							  rowFirst[2] * second.z;
+							  rowFirst[2] * second.z +
+							  rowFirst[3];
 	}
 
 	result.x = tempResult[0];
@@ -120,226 +153,54 @@ Vector3<float> Matrix::operator*(const Vector3<float>& second)
 
 	return result;
 }
+
 //======================================================================================================
-//Matrix Matrix::Inverse()
-//{
-//
-//	//variables for determinant and temp float array
-//	float determinant = 0;
-//	float tempArray[9] = { 0 };
-//
-//	//result matrix to store final result and 
-//	//temp 3x3 matrix to be used to calculate determinant
-//	Matrix result;
-//	Matrix3D tempMatrix3D;
-//
-//	//temp 3x3 matrices used to store four particular 
-//	//matrices and calculate final determinant value 
-//	Matrix3D matrix_1;
-//	Matrix3D matrix_2;
-//	Matrix3D matrix_3;
-//	Matrix3D matrix_4;
-//
-//	//the first step is to calculate the matrix of minors
-//	//this is a loooong calculation that basically loops through 
-//	//each of the 16 matrix elements and calculates the determinant 
-//	//of the remaining 3x3 matrices formed. The determinant is then 
-//	//stored in each element of the result matrix
-//
-//	//---------------
-//	//Matrix Column 1 
-//	//---------------
-//
-//	//matrix element 0
-//	tempArray[0] = m_matrix[5]; tempArray[1] = m_matrix[6]; tempArray[2] = m_matrix[7];
-//	tempArray[3] = m_matrix[9]; tempArray[4] = m_matrix[10]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[13]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[0] = tempMatrix3D.Determinant();
-//
-//	//store this 3x3 matrix for determinant calculation later on
-//	matrix_1 = tempArray;
-//
-//	//matrix element 1
-//	tempArray[0] = m_matrix[4]; tempArray[1] = m_matrix[6]; tempArray[2] = m_matrix[7];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[10]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[1] = tempMatrix3D.Determinant();
-//
-//	//matrix element 2
-//	tempArray[0] = m_matrix[4]; tempArray[1] = m_matrix[5]; tempArray[2] = m_matrix[7];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[9]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[2] = tempMatrix3D.Determinant();
-//
-//	//matrix element 3
-//	tempArray[0] = m_matrix[4]; tempArray[1] = m_matrix[5]; tempArray[2] = m_matrix[6];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[9]; tempArray[5] = m_matrix[10];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[14];
-//
-//	tempMatrix3D = tempArray;
-//	result[3] = tempMatrix3D.Determinant();
-//
-//	//---------------
-//	//Matrix Column 2 
-//	//---------------
-//
-//	//matrix element 4
-//	tempArray[0] = m_matrix[1]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[9]; tempArray[4] = m_matrix[10]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[13]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[4] = tempMatrix3D.Determinant();
-//
-//	//store this 3x3 matrix for determinant calculation later on
-//	matrix_2 = tempArray;
-//
-//	//matrix element 5
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[10]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[5] = tempMatrix3D.Determinant();
-//
-//	//matrix element 6
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[9]; tempArray[5] = m_matrix[11];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[6] = tempMatrix3D.Determinant();
-//
-//	//matrix element 7
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[2];
-//	tempArray[3] = m_matrix[8]; tempArray[4] = m_matrix[9]; tempArray[5] = m_matrix[10];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[14];
-//
-//	tempMatrix3D = tempArray;
-//	result[7] = tempMatrix3D.Determinant();
-//
-//	//---------------
-//	//Matrix Column 3 
-//	//---------------
-//
-//	//matrix element 8
-//	tempArray[0] = m_matrix[1]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[5]; tempArray[4] = m_matrix[6]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[13]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[8] = tempMatrix3D.Determinant();
-//
-//	//store this 3x3 matrix for determinant calculation later on
-//	matrix_3 = tempArray;
-//
-//	//matrix element 9
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[6]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[14]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[9] = tempMatrix3D.Determinant();
-//
-//	//matrix element 10
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[5]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[15];
-//
-//	tempMatrix3D = tempArray;
-//	result[10] = tempMatrix3D.Determinant();
-//
-//	//matrix element 11
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[2];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[5]; tempArray[5] = m_matrix[6];
-//	tempArray[6] = m_matrix[12]; tempArray[7] = m_matrix[13]; tempArray[8] = m_matrix[14];
-//
-//	tempMatrix3D = tempArray;
-//	result[11] = tempMatrix3D.Determinant();
-//
-//	//---------------
-//	//Matrix Column 4 
-//	//---------------
-//
-//	//matrix element 12
-//	tempArray[0] = m_matrix[1]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[5]; tempArray[4] = m_matrix[6]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[9]; tempArray[7] = m_matrix[10]; tempArray[8] = m_matrix[11];
-//
-//	tempMatrix3D = tempArray;
-//	result[12] = tempMatrix3D.Determinant();
-//
-//	//store this 3x3 matrix for determinant calculation later on
-//	matrix_4 = tempArray;
-//
-//	//matrix element 13
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[2]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[6]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[8]; tempArray[7] = m_matrix[10]; tempArray[8] = m_matrix[11];
-//
-//	tempMatrix3D = tempArray;
-//	result[13] = tempMatrix3D.Determinant();
-//
-//	//matrix element 14
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[3];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[5]; tempArray[5] = m_matrix[7];
-//	tempArray[6] = m_matrix[8]; tempArray[7] = m_matrix[9]; tempArray[8] = m_matrix[11];
-//
-//	tempMatrix3D = tempArray;
-//	result[14] = tempMatrix3D.Determinant();
-//
-//	//matrix element 15
-//	tempArray[0] = m_matrix[0]; tempArray[1] = m_matrix[1]; tempArray[2] = m_matrix[2];
-//	tempArray[3] = m_matrix[4]; tempArray[4] = m_matrix[5]; tempArray[5] = m_matrix[6];
-//	tempArray[6] = m_matrix[8]; tempArray[7] = m_matrix[9]; tempArray[8] = m_matrix[10];
-//
-//	tempMatrix3D = tempArray;
-//	result[15] = tempMatrix3D.Determinant();
-//
-//	//the next step is to calculate the matrix of cofactors
-//	//this applies a checkerboard of + and - symbols in a specific 
-//	//sequence to each matrix element. All that needs to be done is 
-//	//apply the - values, as the positive numbers remain the same 
-//	result[1] *= -1;
-//	result[3] *= -1;
-//	result[4] *= -1;
-//	result[6] *= -1;
-//	result[9] *= -1;
-//	result[11] *= -1;
-//	result[12] *= -1;
-//	result[14] *= -1;
-//
-//	//next is to calculate the adjugate
-//	//this merely means to flip the matrix along the major diagonal
-//	std::swap(result[4], result[1]);
-//	std::swap(result[2], result[8]);
-//	std::swap(result[6], result[9]);
-//	std::swap(result[12], result[3]);
-//	std::swap(result[13], result[7]);
-//	std::swap(result[14], result[11]);
-//
-//	//the final calculation is to find the determinant of the original matrix
-//	//using a formula that uses the four temporary 3x3 matrices stored earlier
-//	determinant = m_matrix[0] * matrix_1.Determinant() - m_matrix[4] * matrix_2.Determinant() +
-//		m_matrix[8] * matrix_3.Determinant() - m_matrix[12] * matrix_4.Determinant();
-//
-//	//only if the determinant is not 0
-//	//then multiply the result matrix by 1/det
-//	if (determinant != 0)
-//	{
-//		return (result * (1.0f / determinant));
-//	}
-//
-//	//otherwise return original matrix as we
-//	//cannot find the inverse
-//	return *this;
-//
-//}
+float Matrix::Minor(int row0, int row1, int row2, int col0, int col1, int col2)
+{
+	return m_matrix[4 * row0 + col0] *
+		  (m_matrix[4 * row1 + col1] * m_matrix[4 * row2 + col2] - m_matrix[4 * row2 + col1] * m_matrix[4 * row1 + col2]) -
+		   m_matrix[4 * row0 + col1] *
+		  (m_matrix[4 * row1 + col0] * m_matrix[4 * row2 + col2] - m_matrix[4 * row2 + col0] * m_matrix[4 * row1 + col2]) +
+		   m_matrix[4 * row0 + col2] *
+		  (m_matrix[4 * row1 + col0] * m_matrix[4 * row2 + col1] - m_matrix[4 * row2 + col0] * m_matrix[4 * row1 + col1]);
+}
+//======================================================================================================
+Matrix Matrix::Inverse()
+{
+	const float determinant = 1.0f / (m_matrix[0] * Minor(1, 2, 3, 1, 2, 3) - m_matrix[1] * Minor(1, 2, 3, 0, 2, 3) +
+			                          m_matrix[2] * Minor(1, 2, 3, 0, 1, 3) - m_matrix[3] * Minor(1, 2, 3, 0, 1, 2));
+	Matrix result;
+
+	result[0]  =  Minor(1, 2, 3, 1, 2, 3) * determinant;
+	result[1]  = -Minor(0, 2, 3, 1, 2, 3) * determinant;
+	result[2]  =  Minor(0, 1, 3, 1, 2, 3) * determinant;
+	result[3]  = -Minor(0, 1, 2, 1, 2, 3) * determinant;
+	result[4]  = -Minor(1, 2, 3, 0, 2, 3) * determinant;
+	result[5]  =  Minor(0, 2, 3, 0, 2, 3) * determinant;
+	result[6]  = -Minor(0, 1, 3, 0, 2, 3) * determinant;
+	result[7]  =  Minor(0, 1, 2, 0, 2, 3) * determinant;
+	result[8]  =  Minor(1, 2, 3, 0, 1, 3) * determinant;
+	result[9]  = -Minor(0, 2, 3, 0, 1, 3) * determinant;
+	result[10] =  Minor(0, 1, 3, 0, 1, 3) * determinant;
+	result[11] = -Minor(0, 1, 2, 0, 1, 3) * determinant;
+	result[12] = -Minor(1, 2, 3, 0, 1, 2) * determinant;
+	result[13] =  Minor(0, 2, 3, 0, 1, 2) * determinant;
+	result[14] = -Minor(0, 1, 3, 0, 1, 2) * determinant;
+	result[15] =  Minor(0, 1, 2, 0, 1, 2) * determinant;
+
+	return result;
+}
+//======================================================================================================
+Matrix Matrix::Transpose()
+{
+	Matrix result;
+
+	result[0] = m_matrix[0];  result[4] = m_matrix[1];  result[8]  = m_matrix[2];  result[12] = m_matrix[3];
+	result[1] = m_matrix[4];  result[5] = m_matrix[5];  result[9]  = m_matrix[6];  result[13] = m_matrix[7];
+	result[2] = m_matrix[8];  result[6] = m_matrix[9];  result[10] = m_matrix[10]; result[14] = m_matrix[11];
+	result[3] = m_matrix[12]; result[7] = m_matrix[13]; result[11] = m_matrix[14]; result[15] = m_matrix[15];
+
+	return result;
+}
 
 #endif
