@@ -1,8 +1,10 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "Vector3.h"
+#include <math.h>
+
 #include "Quaternion.h"
+#include "Vector3.h"
 
 class Matrix
 {

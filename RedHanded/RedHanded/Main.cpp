@@ -1,18 +1,33 @@
 #include <iostream>
-#include "ScreenGL.h"
-#include "ScreenDX11.h"
+
+#include "Color.h"
+#include "Matrix.h"
+#include "Quaternion.h"
+#include "Vector3.h"
+#include "Vector2.h"
+
+#include "Factory.h"
 
 int main()
 {
-	ScreenDX11 testScreen(0, 6);
-	//ScreenGL testScreen(4, 0);
-	if (!testScreen.Initialize("Test", HD))
+	Factory* factory = new FactoryDX11;
+
+	Screen* screen = factory->CreateScreen(0, 6);
+	if (!screen->Initialize("Test", HD))
 		return 0;
+
+	Mesh* mesh = factory->CreateMesh();
 
 	bool hasReceived; tagMSG tag;
 	tag.message = WM_NULL;
 
 	PeekMessage(&tag, 0, 0U, 0U, PM_NOREMOVE);
+
+	Vector2<float>::One;
+	Vector3<float>::One;
+	Quaternion::Identity;
+	Matrix::Identity;
+	Color::Cyan;
 
 	while (tag.message != WM_QUIT)
 	{
@@ -28,12 +43,12 @@ int main()
 		}
 		else
 		{
-			testScreen.Clear();
-			testScreen.Present();
+			screen->Clear();
+			screen->Present();
 		}
 	}
 
-	testScreen.Shutdown();
+	screen->Shutdown();
 	return 0;
 
 }

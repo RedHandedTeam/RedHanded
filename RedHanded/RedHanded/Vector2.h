@@ -1,6 +1,8 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
+#include <math.h>
+
 template <class T> class Vector2
 {
 
@@ -157,7 +159,7 @@ template <class T> Vector2<T> Vector2<T>::Lerp(const Vector2<T>& second, float d
 template<class T> Vector2<T> Vector2<T>::Slerp(const Vector2<T>& second, float delta) const
 {
 	float dot = Dot(second);
-	dot = max(min(dot, 1), -1);
+	dot = fmax(fmin(dot, 1.0f), -1.0f);
 	float angle = acosf(dot) * delta;
 	Vector2<T> relative = (second - *this * dot).Normalize();
 	return (*this * cosf(angle)) + (relative * sinf(angle));

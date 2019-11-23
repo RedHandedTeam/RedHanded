@@ -1,9 +1,11 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
+#include <math.h>
+
 #include "Vector3.h"
 
-#define PI 3.14159265359
+#define PI 3.14159265359f
 
 class Quaternion
 {
@@ -67,14 +69,14 @@ Quaternion::Quaternion(float x, float y, float z, float w)
 //======================================================================================================
 Quaternion::Quaternion(Vector3<float> axis, float angle)
 {
-	double radian = angle / 180.0 * PI;
-	double sinThetaOverTwo = sinf(radian / 2.0f);
-	double cosThetaOverTwo = cosf(radian / 2.0f);
+	float radian = angle / 180.0f * PI;
+	float sinThetaOverTwo = sinf(radian / 2.0f);
+	float cosThetaOverTwo = cosf(radian / 2.0f);
 
 	w = cosThetaOverTwo;
-	xyz.x *= sinThetaOverTwo;
-	xyz.y *= sinThetaOverTwo;
-	xyz.z *= sinThetaOverTwo;
+	xyz.x = axis.x * sinThetaOverTwo;
+	xyz.y = axis.y * sinThetaOverTwo;
+	xyz.z = axis.z * sinThetaOverTwo;
 }
 //======================================================================================================
 Quaternion Quaternion::operator+(const Quaternion& second) const
@@ -140,7 +142,7 @@ Quaternion& Quaternion::operator/=(const Quaternion& second)
 //======================================================================================================
 Vector3<float> Quaternion::operator*(const Vector3<float>& second) const
 {
-	Vector3<float> cross = xyz.Cross(second) * 2;
+	Vector3<float> cross = xyz.Cross(second) * 2.0f;
 	return second + cross * w + xyz.Cross(cross);
 }
 //======================================================================================================
@@ -156,7 +158,7 @@ float Quaternion::SqrMagnitude() const
 //======================================================================================================
 float Quaternion::Angle(const Quaternion& second) const
 {
-	return 2 * acosf((Inverse() * second).w) * (180 / PI);
+	return 2.0f * acosf((Inverse() * second).w) * (180.0f / PI);
 }
 //======================================================================================================
 float Quaternion::Dot(const Quaternion& second) const
@@ -182,7 +184,7 @@ Quaternion Quaternion::Normalize() const
 Quaternion Quaternion::Slerp(const Quaternion& second, float delta) const
 {
 	float dot = Dot(second);
-	dot = max(min(dot, 1), -1);
+	dot = fmax(fmin(dot, 1.0f), -1.0f);
 	float angle = acosf(dot) * delta;
 	Quaternion relative = (second - *this * dot).Normalize();
 	return (*this * cosf(angle)) + (relative * sinf(angle));

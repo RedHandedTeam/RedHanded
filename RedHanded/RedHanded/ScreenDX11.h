@@ -1,5 +1,5 @@
-#ifndef SCREEN_DX11
-#define SCREEN_DX11
+#ifndef SCREEN_DX11_H
+#define SCREEN_DX11_H
 
 #include "Screen.h"
 

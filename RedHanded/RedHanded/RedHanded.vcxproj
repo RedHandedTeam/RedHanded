@@ -134,13 +134,20 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshDX11.cpp" />
+    <ClCompile Include="MeshGL.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenDX11.cpp" />
     <ClCompile Include="ScreenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshDX11.h" />
+    <ClInclude Include="MeshGL.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenDX11.h" />
