@@ -126,7 +126,7 @@ template <class T> Vector2<T> Vector2<T>::operator-() const
 //======================================================================================================
 template <class T> T Vector2<T>::Magnitude() const
 {
-	return sqrtf(SqrMagnitude()));
+	return sqrtf(SqrMagnitude());
 }
 //======================================================================================================
 template <class T> T Vector2<T>::SqrMagnitude() const
