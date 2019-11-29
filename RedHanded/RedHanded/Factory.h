@@ -9,19 +9,19 @@
 
 struct Factory
 {
-	virtual Screen* CreateScreen(int arg1, int arg2) = 0;
+	virtual Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) = 0;
 	virtual Mesh* CreateMesh() = 0;
 };
 
 struct FactoryDX11 : public Factory
 {
-	Screen* CreateScreen(int arg1, int arg2) { return new ScreenDX11(arg1, arg2); }
+	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) { return new ScreenDX11(arg1, arg2); }
 	Mesh* CreateMesh() { return new MeshDX11; }
 };
 
 struct FactoryGL : public Factory
 {
-	Screen* CreateScreen(int arg1, int arg2) { return new ScreenGL(arg1, arg2); }
+	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) { return new ScreenGL(arg1, arg2, arg3); }
 	Mesh* CreateMesh() { return new MeshGL; }
 };
 
