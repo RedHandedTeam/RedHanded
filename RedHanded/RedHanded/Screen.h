@@ -25,9 +25,9 @@ public:
 public:
 
 	virtual bool Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS resolution);
-	virtual void Clear() {};
-	virtual void Present() {};
-	virtual void Shutdown() {};
+	virtual void Clear() = 0;
+	virtual void Present() = 0;
+	virtual void Shutdown() = 0;
 
 protected:
 	
