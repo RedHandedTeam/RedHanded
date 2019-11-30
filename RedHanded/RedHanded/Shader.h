@@ -12,8 +12,7 @@ class Shader
 
 public:
 
-	Shader();
-	virtual ~Shader();
+	virtual ~Shader() = 0 {}
 
 public:
 
