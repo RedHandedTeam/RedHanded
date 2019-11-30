@@ -23,12 +23,6 @@ int main()
 
 	PeekMessage(&tag, 0, 0U, 0U, PM_NOREMOVE);
 
-	Vector2<float>::One;
-	Vector3<float>::One;
-	Quaternion::Identity;
-	Matrix::Identity;
-	Color::Cyan;
-
 	while (tag.message != WM_QUIT)
 	{
 		// Process window events.

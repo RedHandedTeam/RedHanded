@@ -69,7 +69,7 @@
     <ClCompile Include="Screen.cpp">
       <Filter>Source Files\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="ShaderGL.cpp">
       <Filter>Source Files\Shader</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +114,9 @@
       <Filter>Header Files\Components\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderGL.h">
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
   </ItemGroup>

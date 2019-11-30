@@ -17,6 +17,11 @@
 //=============== READ ABOVE
 
 //STD Library
+#include <array>
+#include <map>
 #include <string>
 #include <vector>
-#include <array>
+
+//streams
+#include <fstream>
+#include <iostream>

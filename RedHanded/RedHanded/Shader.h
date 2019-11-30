@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string>
+#include "Utilities.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Matrix.h"
