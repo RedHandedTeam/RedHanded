@@ -28,26 +28,20 @@
     <Filter Include="Source Files\Screen">
       <UniqueIdentifier>{c52536ed-05d9-4403-9600-b2d22589ee17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Screen\Base">
-      <UniqueIdentifier>{c5b85629-108f-41cf-a708-cd14e33ee5a6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Components\Mesh">
       <UniqueIdentifier>{6c73e64d-b4f7-42fa-b3de-4fce951262a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Mesh\Base">
-      <UniqueIdentifier>{59071767-6dd0-4b44-bdcd-f204495b8710}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Screen\Base">
-      <UniqueIdentifier>{55ad738b-3173-4585-ae48-b673258c3d30}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Components\Mesh">
       <UniqueIdentifier>{d49bfa95-7ce1-4fd5-845e-767045a44045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Components\Mesh\Base">
-      <UniqueIdentifier>{b6a2f0d9-c0ad-407f-a4e5-5db68a6db0c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Factory">
       <UniqueIdentifier>{d8d26182-0ef3-40ef-a0f8-0dc02254eba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{2799566d-ad32-43dc-8a00-bd11fa5bbbe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shader">
+      <UniqueIdentifier>{2ade0f7c-8352-4899-84c4-e7d892d3d0e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,17 +57,17 @@
     <ClCompile Include="ScreenGL.cpp">
       <Filter>Source Files\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Components\Mesh\Base</Filter>
-    </ClCompile>
     <ClCompile Include="MeshDX11.cpp">
       <Filter>Source Files\Components\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="MeshGL.cpp">
       <Filter>Source Files\Components\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Components\Mesh</Filter>
+    </ClCompile>
     <ClCompile Include="Screen.cpp">
-      <Filter>Source Files\Screen\Base</Filter>
+      <Filter>Source Files\Screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,12 +95,6 @@
     <ClInclude Include="ScreenGL.h">
       <Filter>Header Files\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Header Files\Screen\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Components\Mesh\Base</Filter>
-    </ClInclude>
     <ClInclude Include="MeshDX11.h">
       <Filter>Header Files\Components\Mesh</Filter>
     </ClInclude>
@@ -115,6 +103,12 @@
     </ClInclude>
     <ClInclude Include="Factory.h">
       <Filter>Header Files\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Header Files\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Components\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
