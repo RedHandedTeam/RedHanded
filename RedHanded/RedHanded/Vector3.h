@@ -44,6 +44,7 @@ public:
 	T Distance(const Vector3<T>& second) const;
 	T Dot(const Vector3<T>& second) const;
 
+	T* Vector4() const;
 	Vector3<T> Normalize() const;
 	Vector3<T> Cross(const Vector3<T>& second) const;
 	Vector3<T> Lerp(const Vector3<T>& second, float delta) const;
@@ -156,6 +157,11 @@ template <class T> T Vector3<T>::Distance(const Vector3<T>& second) const
 template <class T> T Vector3<T>::Dot(const Vector3<T>& second) const
 {
 	return (x * second.x) + (y * second.y) + (z * second.z);
+}
+//======================================================================================================
+template<class T> T* Vector3<T>::Vector4() const
+{
+	return new T[4] = { x, y, z, static_cast<T>(0) };
 }
 //======================================================================================================
 template <class T> Vector3<T> Vector3<T>::Normalize() const
