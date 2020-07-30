@@ -1,27 +1,27 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "Vector3.h"
+#include "Utilities.h"
 #include "Vector2.h"
-#include <string>
-#include <map>
-#include <list>
+#include "Vector3.h"
+#include "Color.h"
+#include "Matrix.h"
 
 struct Vertex
 {
 	Vector3<float> position;
-	Vector3<float> color;
 	Vector3<float> normal;
 	Vector2<float> uv;
+	Color color;
 };
 
 struct Material
 {
 	float shininess;
 	float transparency;
-	Vector3<float> ambient;
-	Vector2<float> diffuse;
-	Vector2<float> specular;
+	Color ambient;
+	Color diffuse;
+	Color specular;
 };
 
 class Mesh

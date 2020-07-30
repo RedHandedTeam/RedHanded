@@ -1,11 +1,5 @@
 #include <iostream>
 
-#include "Color.h"
-#include "Matrix.h"
-#include "Quaternion.h"
-#include "Vector3.h"
-#include "Vector2.h"
-
 #include "Factory.h"
 
 int main()
@@ -23,11 +17,11 @@ int main()
 
 	PeekMessage(&tag, 0, 0U, 0U, PM_NOREMOVE);
 
-	Vector2<float>::One;
-	Vector3<float>::One;
-	Quaternion::Identity;
-	Matrix::Identity;
-	Color::Cyan;
+	//Vector2<float>::One;
+	//Vector3<float>::One;
+	//Quaternion::Identity;
+	//Matrix::Identity;
+	//Color::Cyan;
 
 	while (tag.message != WM_QUIT)
 	{
