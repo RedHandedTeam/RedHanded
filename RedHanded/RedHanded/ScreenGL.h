@@ -18,6 +18,9 @@ public:
 	virtual void Present();
 	virtual void Shutdown();
 
+	HDC& GetDeviceContext() { return m_deviceContext; }
+	HGLRC& GetRenderContext() { return m_renderContext; }
+
 private:
 
 	HDC m_deviceContext;

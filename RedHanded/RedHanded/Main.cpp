@@ -11,17 +11,10 @@ int main()
 		return 0;
 
 	Mesh* mesh = factory->CreateMesh();
-
 	bool hasReceived; tagMSG tag;
 	tag.message = WM_NULL;
 
 	PeekMessage(&tag, 0, 0U, 0U, PM_NOREMOVE);
-
-	//Vector2<float>::One;
-	//Vector3<float>::One;
-	//Quaternion::Identity;
-	//Matrix::Identity;
-	//Color::Cyan;
 
 	while (tag.message != WM_QUIT)
 	{
@@ -38,6 +31,7 @@ int main()
 		else
 		{
 			screen->Clear();
+			mesh->Draw();
 			screen->Present();
 		}
 	}

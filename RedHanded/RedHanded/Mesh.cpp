@@ -16,10 +16,10 @@ void Mesh::Load(std::string id)
 {
 }
 
-void Mesh::UnLoad()
+void Mesh::Unload()
 {
 }
 
-void Mesh::UnLoad(std::string id)
+void Mesh::Unload(std::string id)
 {
 }

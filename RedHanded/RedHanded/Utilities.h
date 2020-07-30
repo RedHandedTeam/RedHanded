@@ -8,6 +8,7 @@
 
 //DirectX
 #include <dxgi1_3.h>
+#include <d3dcompiler.h>
 #include <d3d11.h>
 
 //OpenGL

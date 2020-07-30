@@ -15,14 +15,24 @@ struct Factory
 
 struct FactoryDX11 : public Factory
 {
-	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) { return new ScreenDX11(arg1, arg2); }
-	Mesh* CreateMesh() { return new MeshDX11; }
+	ScreenDX11* screenAPI;
+	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) 
+	{ 
+		screenAPI = new ScreenDX11(arg1, arg2);
+		return screenAPI;
+	}
+	Mesh* CreateMesh() { return new MeshDX11(screenAPI); }
 };
 
 struct FactoryGL : public Factory
 {
-	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) { return new ScreenGL(arg1, arg2, arg3); }
-	Mesh* CreateMesh() { return new MeshGL; }
+	ScreenGL* screenAPI;
+	Screen* CreateScreen(int arg1, int arg2, bool arg3 = false) 
+	{ 
+		screenAPI = new ScreenGL(arg1, arg2, arg3);
+		return screenAPI;
+	}
+	Mesh* CreateMesh() { return new MeshGL(); }
 };
 
 #endif 

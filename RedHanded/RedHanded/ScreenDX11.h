@@ -18,18 +18,17 @@ public:
 	virtual void Present();
 	virtual void Shutdown();
 
+	Microsoft::WRL::ComPtr<ID3D11Device>& GetDevice() { return m_device; }
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& GetDeviceContext() { return m_deviceContext; }
+
 private:
 
 	Microsoft::WRL::ComPtr<ID3D11Device> m_device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> m_swapChain;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_backBuffer;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_depthStencil;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_depthStencilView;
-	D3D_FEATURE_LEVEL m_featureLevel;
-    D3D11_VIEWPORT m_viewport;
-
+	
 	std::vector<D3D_FEATURE_LEVEL> m_compatibleLevels;
 };
 

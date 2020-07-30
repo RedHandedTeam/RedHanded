@@ -48,11 +48,12 @@ bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS r
 	swapChainDescriptor.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	swapChainDescriptor.OutputWindow = m_windowHandle;
 
+	//feature level handle
+	D3D_FEATURE_LEVEL m_featureLevel;
 	//create DirectX device and device context and swapchain using
 	//the compatibility flags, quality settings, and swapchane properties
-	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags,
-								  m_compatibleLevels.data(), m_compatibleLevels.size(), D3D11_SDK_VERSION, &swapChainDescriptor,
-								  m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &m_featureLevel, m_deviceContext.GetAddressOf());
+	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, deviceFlags, m_compatibleLevels.data(), m_compatibleLevels.size(),
+								  D3D11_SDK_VERSION, &swapChainDescriptor, &m_swapChain, &m_device, &m_featureLevel, &m_deviceContext);
 
 	//if the GPU feature level is not found, then adjust to lower supported settings
 	if (!m_featureLevel)
@@ -80,21 +81,24 @@ bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS r
 		return false;
 	}
 
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_backBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_depthStencil;
+
 	//configure the back buffer from swapchain
-	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_backBuffer.GetAddressOf()));
+	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &m_backBuffer);
 
 	//create a depth-stencil view for use with 3D rendering if needed
 	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, m_width, m_height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
-
-	//parse the depth texture settings
-	m_device->CreateTexture2D(&depthStencilDesc, nullptr, m_depthStencil.GetAddressOf());
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
+	//parse the depth texture settings
+	m_device->CreateTexture2D(&depthStencilDesc, nullptr, &m_depthStencil);
 
 	//create depth and render target buffer
-	m_device->CreateDepthStencilView(m_depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.GetAddressOf());
-	m_device->CreateRenderTargetView(m_backBuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
-	
+	m_device->CreateDepthStencilView(m_depthStencil.Get(), &depthStencilViewDesc, &m_depthStencilView);
+	m_device->CreateRenderTargetView(m_backBuffer.Get(), nullptr, &m_renderTargetView);
+
 	//create viewport using the stored width and height
+	D3D11_VIEWPORT m_viewport;
 	ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
 	m_viewport.Height = static_cast<float>(m_height);
 	m_viewport.Width  = static_cast<float>(m_width);
@@ -102,6 +106,7 @@ bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS r
 	m_viewport.MaxDepth = 1;
 
 	m_deviceContext->RSSetViewports(1, &m_viewport);
+	m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
 	
 	//display and update the window for the first time
 	ShowWindow(m_windowHandle, SW_SHOW);
@@ -113,7 +118,7 @@ bool ScreenDX11::Initialize(const std::string& windowTitle, SCREEN_RESOLUTIONS r
 void ScreenDX11::Clear()
 {
 	//clear the render target and the z-buffer.
-	const float black[] = { 0.f,0.f,0.f, 1.000f };
+	const float black[] = { 0.f, 1.f, 0.f, 1.f };
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView.Get(), black);
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	// Set the render target.
@@ -129,14 +134,8 @@ void ScreenDX11::Shutdown()
 {
 	//release the render target view based on the back buffer:
 	m_renderTargetView.Reset();
-
 	//release depth stencil view and depth buffer:
 	m_depthStencilView.Reset();
-	m_depthStencil.Reset();
-
-	//release the back buffer itself:
-	m_backBuffer.Reset();
-
 	//release the devices context resources:
 	m_deviceContext->Flush();
 }
